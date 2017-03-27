@@ -95,9 +95,19 @@ $(function () {
 		);
 	};
 
+	/*
 	document.addEventListener("DOMContentLoaded", function (event) {
 		bp.loadT();
 	});
+	*/
+
+	bp.selectS = function (selected_div) {
+		$(".s-item").removeClass("selected");
+		$(selected_div).addClass("selected");
+		var width = $(window).width();
+		if (width < 992) $("#select").addClass("hidden");
+		$("#display").removeClass("hidden");
+	};
 
 	
 
