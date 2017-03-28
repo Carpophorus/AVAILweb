@@ -163,7 +163,7 @@ body {
 
 .s-item {
 	text-align: center;
-	line-height: 7vh;
+	line-height: 40px;
 	border-radius: 5px;
 	margin-bottom: 15px;
 }
@@ -319,6 +319,10 @@ h2 {
 	#main-content>div {
 		padding-left: 20px;
 		padding-right: 20px;
+	}
+
+	.s-item {
+		line-height: 7vh;
 	}
 }
 
