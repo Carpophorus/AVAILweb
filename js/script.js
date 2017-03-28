@@ -1,7 +1,7 @@
 $(function () {
   $("#navbarToggle").blur(function (event) {
-    var screenWidth = window.innerWidth;
-    if (screenWidth < 992) {
+    var width = window.innerWidth;
+    if (width < 992) {
       $("#collapsable-nav").collapse('hide');
     }
   });
@@ -95,6 +95,7 @@ $(function () {
 		);
 	};
 
+	//TODO: uncomment after development is finished
 	/*
 	document.addEventListener("DOMContentLoaded", function (event) {
 		bp.loadT();
@@ -104,9 +105,20 @@ $(function () {
 	bp.selectS = function (selected_div) {
 		$(".s-item").removeClass("selected");
 		$(selected_div).addClass("selected");
-		var width = $(window).width();
-		if (width < 992) $("#select").addClass("hidden");
+		var width = window.innerWidth;
+		if (width < 992) {
+			$("#select").addClass("hidden");
+			$("#d-back").removeClass("hidden");
+			scrollTo(0, 0);
+		}
 		$("#display").removeClass("hidden");
+	};
+
+	bp.backD = function () {
+		$("#select").removeClass("hidden");
+		$("#display").addClass("hidden");
+		$("#d-back").addClass("hidden");
+		scrollTo(0, 0);
 	};
 
 	

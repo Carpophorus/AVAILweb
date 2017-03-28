@@ -234,12 +234,14 @@ h2 {
 
 #d-back {
 	position: fixed;
-	size: 52px 52px;
-	bottom: 30px;
-	right: 0;
+	width: 52px;
+	height: 52px;
+	top: 0;
+	left: 0;
 	background: url('../img/back.svg') no-repeat;
-	background-size: auto 100%;
-	background-position: right;
+	background-size: auto 22px;
+	background-position: center;
+	z-index: 1031;
 }
 
 /* END OTHER */
@@ -307,6 +309,11 @@ h2 {
 
 	#main-content {
 		padding-top: 15px;
+	}
+
+	#main-content>div {
+		padding-left: 20px;
+		padding-right: 20px;
 	}
 }
 
