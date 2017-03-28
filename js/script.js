@@ -20,7 +20,7 @@ $(function () {
 	var pHtml = "snp/p.html";
 
 	var showLoading = function (selector) {
-		var html = "<div class='loader'></div>";
+		var html = "<div id=\"bckgrnd\"></div><div class='loader'></div>";
 		insertHtml(selector, html);
 	};
 
