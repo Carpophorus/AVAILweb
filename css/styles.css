@@ -11,10 +11,14 @@ header {
 	min-height: 0;
 }
 
+.navbar-position {
+	position: relative;
+	z-index: 1030;
+}
+
 .navbar-header {
 	width: 100%;
 	background-color: transparent;
-	position: relative;
 }
 
 .container>.navbar-header {
@@ -197,9 +201,10 @@ h2 {
 #main-content #bckgrnd {
 	position: fixed;
 	width: 100vw;
-	height: 100vh;
+	height: 160vh;
 	padding: 0;
-	background: url('../img/desktop bckgrnd.png') no-repeat;
+	top: -65px;
+	background: url('../img/bckgrnd.png') no-repeat;
 	background-size: auto 100%;
 	background-position: center;
 }
@@ -300,7 +305,6 @@ h2 {
     	right: 0;
     	left: 0;
     	top: 0;
-    	z-index: 1030;
 	}
 
 	body {
