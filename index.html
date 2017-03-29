@@ -32,28 +32,28 @@
         			<div id="logo"></div>
         			<div class="row visible-lg visible-md" id="menu-items">
         				<div class="col-lg-2 col-md-2 tab-indicator" id="menu-item-1">
-        					<a href="javascript:void(0)" onclick="$bp.loadT();">
+        					<a href="javascript:void(0)" onclick="$AVAIL.loadT();">
         						<span></span>
         						<h2>TIMOVI</h2>
         					</a>
         				</div>
         				<div class="col-lg-1 col-md-1"></div>
         				<div class="col-lg-2 col-md-2" id="menu-item-2">
-        					<a href="javascript:void(0)" onclick="$bp.loadS();">
+        					<a href="javascript:void(0)" onclick="$AVAIL.loadS();">
         						<span></span>
         						<h2>STANJE</h2>
         					</a>
         				</div>
         				<div class="col-lg-2 col-md-2"></div>
         				<div class="col-lg-2 col-md-2" id="menu-item-3">
-        					<a href="javascript:void(0)" onclick="$bp.loadN();">
+        					<a href="javascript:void(0)" onclick="$AVAIL.loadN();">
         						<span></span>
         						<h2>NALOZI</h2>
         					</a>
         				</div>
         				<div class="col-lg-1 col-md-1"></div>
         				<div class="col-lg-2 col-md-2" id="menu-item-4">
-        					<a href="javascript:void(0)" onclick="$bp.loadP();">
+        					<a href="javascript:void(0)" onclick="$AVAIL.loadP();">
         						<span></span>
         						<h2>PRETRAGA</h2>
         					</a>
@@ -68,25 +68,25 @@
         		<div id="collapsable-nav" class="collapse navbar-collapse">
 					<ul id="nav-list" class="nav navbar-nav navbar-right hidden-lg hidden-md">
 						<li>
-							<a href="javascript:void(0)" onclick="$bp.loadT();">
+							<a href="javascript:void(0)" onclick="$AVAIL.loadT();">
 				    			<span></span>
 				    			<h2>TIMOVI</h2>
 				    		</a>
 				    	</li>
 				    	<li>
-				    		<a href="javascript:void(0)" onclick="$bp.loadS();">
+				    		<a href="javascript:void(0)" onclick="$AVAIL.loadS();">
 				    			<span></span>
 				    			<h2>STANJE</h2>
 				    		</a>
 				    	</li>
 				    	<li>
-				    		<a href="javascript:void(0)" onclick="$bp.loadN();">
+				    		<a href="javascript:void(0)" onclick="$AVAIL.loadN();">
 				    			<span></span>
 				    			<h2>NALOZI</h2>
 				    		</a>
 				    	</li>
 				    	<li>
-				    		<a href="javascript:void(0)" onclick="$bp.loadP();">
+				    		<a href="javascript:void(0)" onclick="$AVAIL.loadP();">
 				    			<span></span>
 				    			<h2>PRETRAGA</h2>
 				    		</a>
@@ -99,47 +99,11 @@
 
 	<div id="main-content">
         <div id="bckgrnd"></div>
-		<div class="row" id="s">
-            <div class="col-lg-6 col-md-6 left row" id="select">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Magacin</div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Pera Ložač</div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Milorad Mikić</div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Pera Ložač</div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Milorad Mikić</div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Pera Ložač</div>
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$bp.selectS(this)">Milorad Mikić</div>
+        <div id="t">
+            <div class="col-lg-6 col-md-6 left" id="teams">
+                123
             </div>
-            <div class="col-lg-6 col-md-6 right hidden" id="display">
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-                <div class="d-item">
-                    <div class="d-item-name">item name</div>
-                    <div class="d-item-amount">item amount</div>
-                </div>
-            </div>
-            <div class="hidden" id="d-back" onclick=$bp.backD()></div>
+            <div class="col-lg-6 col-md-6 right hidden" id="map">123</div>
         </div>
 	</div>
 

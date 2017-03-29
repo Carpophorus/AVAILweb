@@ -12,7 +12,10 @@ $(function () {
 });
 
 (function (global) {
-	var bp = {};
+
+	/* general */
+
+	var AVAIL = {};
 
 	var tHtml = "snp/t.html";
 	var sHtml = "snp/s.html";
@@ -29,7 +32,16 @@ $(function () {
 		targetElem.innerHTML = html;
 	};
 
-	bp.loadT = function () {
+	//TODO: uncomment after development is finished
+	/*
+	document.addEventListener("DOMContentLoaded", function (event) {
+		AVAIL.loadT();
+	});
+	*/
+
+	/* load main snippets */
+
+	AVAIL.loadT = function () {
 		window.scrollTo(0,0);
 		showLoading("#main-content");
 		$("#menu-item-1").addClass("tab-indicator");
@@ -43,11 +55,11 @@ $(function () {
 			},
 			false
 		);
+		//TODO: show small loader on #teams (could be static in t.html)
 		// if (history.state.state != 1) history.pushState({state: 1}, null, null);
-		// window.scrollTo(0,0);
 	};
 
-	bp.loadS = function () {
+	AVAIL.loadS = function () {
 		window.scrollTo(0,0);
 		showLoading("#main-content");
 		$("#menu-item-1").removeClass("tab-indicator");
@@ -61,9 +73,11 @@ $(function () {
 			},
 			false
 		);
+		//TODO: show small loader on #select (could be static in s.html)
+		//TODO: remove static data from s.html, populate #select's inner html with real data and show it (storage first, then alphabetically)
 	};
 
-	bp.loadN = function () {
+	AVAIL.loadN = function () {
 		window.scrollTo(0,0);
 		showLoading("#main-content");
 		$("#menu-item-1").removeClass("tab-indicator");
@@ -79,7 +93,7 @@ $(function () {
 		);
 	};
 
-	bp.loadP = function () {
+	AVAIL.loadP = function () {
 		window.scrollTo(0,0);
 		showLoading("#main-content");
 		$("#menu-item-1").removeClass("tab-indicator");
@@ -95,30 +109,31 @@ $(function () {
 		);
 	};
 
-	//TODO: uncomment after development is finished
-	/*
-	document.addEventListener("DOMContentLoaded", function (event) {
-		bp.loadT();
-	});
-	*/
+	/* T */
 
-	bp.selectS = function (selected_div) {
+	
+
+	/* S */
+
+	AVAIL.selectS = function (selected_div) {
 		$(".s-item").removeClass("selected");
 		$(selected_div).addClass("selected");
 		var width = window.innerWidth;
 		if (width < 992) {
 			$("#select").addClass("hidden");
 			$("#d-back").removeClass("hidden");
-			scrollTo(0, 0);
 		}
 		$("#display").removeClass("hidden");
+		//TODO: show small loader on #display
+		//TODO: fetch data, generate html, show it
+		window.scrollTo(0, 0);
 	};
 
-	bp.backD = function () {
+	AVAIL.backD = function () {
 		$("#select").removeClass("hidden");
 		$("#display").addClass("hidden");
 		$("#d-back").addClass("hidden");
-		scrollTo(0, 0);
+		window.scrollTo(0, 0);
 	};
 
 	
@@ -183,7 +198,7 @@ $(function () {
 	// 	window.scrollTo(0,0);
 	// });
 
-	// bp.loadHome = function () {
+	// AVAIL.loadHome = function () {
 	// 	showLoading("#main-content", "home");
 	// 	$ajaxUtils.sendGetRequest(
 	// 		homeHtml,
@@ -196,7 +211,7 @@ $(function () {
 	// 	window.scrollTo(0,0);
 	// };
 
-	// bp.loadRegister = function () {
+	// AVAIL.loadRegister = function () {
 	// 	showLoading("#main-content", "register");
 	// 	$ajaxUtils.sendGetRequest(
 	// 		registerHtml,
@@ -209,7 +224,7 @@ $(function () {
 	// 	window.scrollTo(0,0);
 	// };
 
-	// bp.loadNews = function () {
+	// AVAIL.loadNews = function () {
 	// 	showLoading("#main-content", "news");
 	// 	$ajaxUtils.sendGetRequest(
 	// 		newsHtml,
@@ -222,7 +237,7 @@ $(function () {
 	// 	window.scrollTo(0,0);
 	// };
 
-	// bp.loadAbout = function () {
+	// AVAIL.loadAbout = function () {
 	// 	showLoading("#main-content", "about");
 	// 	$ajaxUtils.sendGetRequest(
 	// 		aboutHtml,
@@ -235,7 +250,7 @@ $(function () {
 	// 	window.scrollTo(0,0);
 	// };
 
-	// bp.loadContact = function () {
+	// AVAIL.loadContact = function () {
 	// 	showLoading("#main-content", "contact");
 	// 	$ajaxUtils.sendGetRequest(
 	// 		contactHtml,
@@ -248,7 +263,7 @@ $(function () {
 	// 	window.scrollTo(0,0);
 	// };
 
-	// bp.loadPiece = function (articleNumber) {
+	// AVAIL.loadPiece = function (articleNumber) {
 	// 	showLoading("#main-content", "news");
 	// 	var articleHtml;
 	// 	switch(articleNumber) {
@@ -328,5 +343,5 @@ $(function () {
 	// 	}
 	// }
 
-	global.$bp = bp;
+	global.$AVAIL = AVAIL;
 })(window);

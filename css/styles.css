@@ -125,54 +125,6 @@ body {
 	font-size: 16px;
 }
 
-#main-content {
-	background-color: #333333;
-	color: white;
-	min-height: 95vh;
-}
-
-#main-content>div {
-	padding: 48px;
-}
-
-#main-content>.loader {
-	background: url('../img/loader.svg') no-repeat;
-	width: 100px;
-	height: 100px;
-	background-size: 100% auto;
-	background-position: 50% 30%;
-	margin: auto;
-	padding-top: 200px;
-	padding-bottom: 600px;
-	position: relative;
-}
-
-.left {
-	padding: 0;
-	padding-right: 50px;
-}
-
-.right {
-	padding: 0;
-	padding-left: 50px;
-}
-
-.row {
-	margin: 0;
-}
-
-.s-item {
-	text-align: center;
-	line-height: 40px;
-	border-radius: 5px;
-	margin-bottom: 15px;
-}
-
-.s-item:hover{
-	background-color: rgba(255, 255, 255, 0.07);
-	cursor: pointer;
-}
-
 a, a:hover, a:focus, a:visited {
   text-decoration: none;
   color: inherit;
@@ -198,6 +150,28 @@ h2 {
 	font-weight: 600;
 }
 
+#main-content {
+	background-color: #333333;
+	color: white;
+	min-height: 100vh;
+}
+
+#main-content>div {
+	padding: 48px;
+}
+
+#main-content>.loader {
+	background: url('../img/loader.svg') no-repeat;
+	width: 100px;
+	height: 100px;
+	background-size: 100% auto;
+	background-position: 50% 30%;
+	margin: auto;
+	padding-top: 200px;
+	padding-bottom: 600px;
+	position: relative;
+}
+
 #main-content #bckgrnd {
 	position: fixed;
 	width: 100vw;
@@ -209,12 +183,38 @@ h2 {
 	background-position: center;
 }
 
+.left {
+	padding: 0;
+	padding-right: 50px;
+}
+
+.right {
+	padding: 0;
+	padding-left: 50px;
+}
+
+.row {
+	margin: 0;
+}
+
 .selected {
 	background-color: rgba(255, 255, 255, 0.18);
 }
 
 .selected:hover {
 	background-color: rgba(255, 255, 255, 0.18);
+}
+
+.s-item {
+	text-align: center;
+	line-height: 52px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+.s-item:hover{
+	background-color: rgba(255, 255, 255, 0.07);
+	cursor: pointer;
 }
 
 .d-item {
@@ -287,9 +287,8 @@ h2 {
 	.collapse.in {
 	  display:block !important;
 	}
-}
+	/* end breakpoint change */
 
-@media (max-width: 991.5px) {
 	#header-nav .container {
 		margin: 0;
 		padding: 0;
