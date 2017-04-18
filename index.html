@@ -101,17 +101,157 @@
 
     <div id="main-content">
         <div id="bckgrnd"></div>
-        <div id="n">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="nn">
-                <span id="idA">8000</span>
-                <span id="cn">IDEA</span>
-                <span id="tn">Pera&nbsp;Ložač</span>
+        <div class="row" id="n">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="status-2" id="nn">
+                    <span id="idA">8000</span>
+                    <br class="hidden-lg hidden-md"><span id="cn">IDEA</span>
+                    <br class="hidden-lg hidden-md"><span id="tn">PeraLožač PeraLožačasasda</span>
+                    <div id="toggle-details" onClick="$AVAIL.toggleDetails();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-materials" onClick="$AVAIL.toggleMaterials();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-done" onClick="$AVAIL.toggleDone();">
+                        <div id="n-img"></div>
+                    </div>
+                </div>
+                <div class="row hidden" id="details">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <strong>Klijent:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Lokacija:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Zakazano vreme:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Kratak opis: </strong>
+                        <br>
+                        <div class="indented">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis quidem voluptates nisi consectetur nemo, optio illo qui corrupti voluptatem inventore rem rerum magnam porro deleniti a natus voluptate, explicabo dolor.</div>
+                        <br><strong>Detaljan opis: </strong>
+                        <br>
+                        <div class="indented">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum a tenetur, odit numquam ratione ipsa voluptatum aperiam soluta nemo non impedit nam velit aspernatur molestias quibusdam quae voluptates quia odio! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, explicabo repellendus unde excepturi soluta provident, debitis reiciendis ipsa, delectus numquam id. Laboriosam enim ut dicta dolores animi, aliquam consectetur pariatur?</div>
+                    </div>
+                    <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <strong>Serviser:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Vreme početka:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Vreme kraja:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Lokacija početka:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Lokacija kraja:</strong>
+                        <br>
+                        <div class="indented">...</div>
+                        <br><strong>Napomena: </strong>
+                        <br>
+                        <div class="indented">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis quidem voluptates nisi consectetur nemo, optio illo qui corrupti voluptatem inventore rem rerum magnam porro deleniti a natus voluptate, explicabo dolor. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae voluptate libero hic quo, omnis maxime dignissimos, iusto ex beatae eligendi consequatur nihil aliquam molestias. Dicta quam, minus veniam accusamus beatae! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit, eum aperiam neque? Saepe dolore provident, dolores totam porro praesentium, aspernatur assumenda sapiente facere quibusdam harum optio, unde ad veniam quam.</div>
+                    </div>
+                </div>
+                <div class="row hidden" id="materials">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="material">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-name">
+                            <strong>materialName1materialName1</strong>
+                        </div>
+                        <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-amount">
+                            materialAmount
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="material">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-name">
+                            <strong>materialName1materialName1</strong>
+                        </div>
+                        <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-amount">
+                            materialAmount
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="material">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-name">
+                            <strong>materialName1materialName1</strong>
+                        </div>
+                        <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-amount">
+                            materialAmount
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="material">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-name">
+                            <strong>materialName1materialName1</strong>
+                        </div>
+                        <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-amount">
+                            materialAmount
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="material-last">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-name">
+                            <strong>materialName1materialName1</strong>
+                        </div>
+                        <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-amount">
+                            materialAmount
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="nn">
-                123
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="status-3" id="nn">
+                    <span id="idA">8001</span>
+                    <br class="hidden-lg hidden-md"><span id="cn">IDEA</span>
+                    <br class="hidden-lg hidden-md"><span id="tn">Pera&nbsp;Ložač</span>
+                    <div id="toggle-details" onClick="$AVAIL.toggleDetails();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-materials" onClick="$AVAIL.toggleMaterials();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-done" onClick="$AVAIL.toggleDone();">
+                        <div id="n-img"></div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="nn">
-                123
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="status-4" id="nn">
+                    <span id="idA">8007</span>
+                    <br class="hidden-lg hidden-md"><span id="cn">IDEA</span>
+                    <br class="hidden-lg hidden-md"><span id="tn">Pera&nbsp;Ložač</span>
+                    <div id="toggle-details" onClick="$AVAIL.toggleDetails();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-materials" onClick="$AVAIL.toggleMaterials();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-done" onClick="$AVAIL.toggleDone();">
+                        <div id="n-img"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="status-5" id="nn">
+                    <span id="idA">8003</span>
+                    <br class="hidden-lg hidden-md"><span id="cn">IDEA</span>
+                    <br class="hidden-lg hidden-md"><span id="tn">Pera&nbsp;Ložač</span>
+                    <div id="toggle-details" onClick="$AVAIL.toggleDetails();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-materials" onClick="$AVAIL.toggleMaterials();">
+                        <div class="toggle-off" id="n-img"></div>
+                    </div>
+                    <div id="toggle-done" onClick="$AVAIL.toggleDone();">
+                        <div id="n-img"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
