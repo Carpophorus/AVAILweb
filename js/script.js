@@ -145,17 +145,55 @@ $(function () {
 
     /* N */
 
-    AVAIL.toggleDetails = function () {
+    AVAIL.toggleDetails = function (e) {
+        if ($(e).find("#n-img").hasClass("toggle-off")) {
+            $(e).find("#n-img").removeClass("toggle-off");
+            $(e).find("#n-img").addClass("toggle-on");
+            $(e).parent().parent().find("#details").removeClass("hidden");
+        } else if ($(e).find("#n-img").hasClass("toggle-on")) {
+            $(e).find("#n-img").addClass("toggle-off");
+            $(e).find("#n-img").removeClass("toggle-on");
+            $(e).parent().parent().find("#details").addClass("hidden");
+        }
+    };
 
-    }
+    AVAIL.toggleMaterials = function (e) {
+        if ($(e).find("#n-img").hasClass("toggle-off")) {
+            $(e).find("#n-img").removeClass("toggle-off");
+            $(e).find("#n-img").addClass("toggle-on");
+            $(e).parent().parent().find("#materials").removeClass("hidden");
+        } else if ($(e).find("#n-img").hasClass("toggle-on")) {
+            $(e).find("#n-img").addClass("toggle-off");
+            $(e).find("#n-img").removeClass("toggle-on");
+            $(e).parent().parent().find("#materials").addClass("hidden");
+        }
+        //if materials contains loader, fetch data and show it
+    };
 
-    AVAIL.toggleMaterials = function () {
-
-    }
-
-    AVAIL.toggleDone = function () {
-
-    }
+    AVAIL.toggleDone = function (e) {
+        /*var choice = confirm("Da li želite da završite obradu ovog radnog naloga?");
+        if (choice == true) {
+            //set processed = 2 on assignment
+            $(e).parent().parent().addClass("hidden");
+        }*/
+        $.confirm({
+            title: "POTVRDA AKCIJE",
+            content: "Da li želite da završite obradu ovog radnog naloga?",
+            buttons: {
+                confirm: {
+                    text: "DA",
+                    btnClass: "btn-red",
+                    action: function () {
+                        //set processed = 2 on assignment
+                        $(e).parent().parent().addClass("hidden");
+                    }
+                },
+                cancel: {
+                    text: "NE"
+                }
+            }
+        })
+    };
 
 
 

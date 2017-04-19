@@ -267,41 +267,45 @@ h2 {
     background-color: rgba(255, 255, 255, 0.18);
     border-radius: 5px;
     padding: 15px;
+    padding-left: 25px;
+    padding-right: 80px;
     font-family: Montserrat;
     font-weight: 700;
     position: relative;
 }
 
 #nn span {
-    padding-left: 10px;
+    padding-left: 0px;
     padding-right: 40px;
+    display: inline-block;
+    min-width: 100px;
 }
 
 .status-2 {
     background: url('../img/success.svg') no-repeat;
-    background-size: auto 50%;
-    background-position: center top;
+    background-size: auto 20px;
+    background-position: center -1px;
     border-top: 1.5px solid #00A02A;
 }
 
 .status-3 {
     background: url('../img/partial.svg') no-repeat;
-    background-size: auto 50%;
-    background-position: center top;
+    background-size: auto 20px;
+    background-position: center -1px;
     border-top: 1.5px solid #0B6AA0;
 }
 
 .status-4 {
     background: url('../img/cancelled.svg') no-repeat;
-    background-size: auto 50%;
-    background-position: center top;
+    background-size: auto 20px;
+    background-position: center -1px;
     border-top: 0px solid #333333;
 }
 
 .status-5 {
     background: url('../img/failed.svg') no-repeat;
-    background-size: auto 50%;
-    background-position: center top;
+    background-size: auto 20px;
+    background-position: center -1px;
     border-top: 1.5px solid #A00309;
 }
 
@@ -315,7 +319,7 @@ h2 {
     cursor: pointer;
 }
 
-#toggle-details {
+#toggle-details .toggle-off {
     background: url('../img/show details.svg') no-repeat;
     background-size: auto 100%;
     position: absolute;
@@ -323,8 +327,24 @@ h2 {
     top: 13px;
 }
 
-#toggle-materials {
+#toggle-details .toggle-on {
+    background: url('../img/hide details.svg') no-repeat;
+    background-size: auto 100%;
+    position: absolute;
+    right: 100px;
+    top: 13px;
+}
+
+#toggle-materials .toggle-off {
     background: url('../img/show materials.svg') no-repeat;
+    background-size: auto 100%;
+    position: absolute;
+    right: 40px;
+    top: 13px;
+}
+
+#toggle-materials .toggle-on {
+    background: url('../img/hide materials.svg') no-repeat;
     background-size: auto 100%;
     position: absolute;
     right: 40px;
@@ -463,29 +483,19 @@ h2 {
     .s-item {
         line-height: 7vh;
     }
-    .status-2 {
-        background-size: auto 33%;
-    }
-    .status-3 {
-        background-size: auto 33%;
-    }
-    .status-4 {
-        background-size: auto 33%;
-    }
-    .status-5 {
-        background-size: auto 33%;
-    }
     #material-name {
         text-align: left;
     }
     #material-amount {
         text-align: right;
     }
-    #toggle-details {
+    #toggle-details .toggle-on,
+    #toggle-details .toggle-off {
         right: 30px;
         top: 17.5px;
     }
-    #toggle-materials {
+    #toggle-materials .toggle-on,
+    #toggle-materials .toggle-off {
         right: 30px;
         top: 60px;
     }
