@@ -247,7 +247,7 @@ $(function () {
         $("#results1").removeClass("hidden");
         //TODO: fetch data here, inner html spinner on results1 before results come
         $ajaxUtils.sendGetRequest(
-            "http://avail.azurewebsites.net/api/rezultat/ucinakServisera?id=1",
+            "https://avail.azurewebsites.net/api/rezultat/ucinakServisera?id=1",
             function (responseText) {
                 console.log(responseText);
             },
