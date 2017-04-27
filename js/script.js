@@ -171,11 +171,6 @@ $(function () {
     };
 
     AVAIL.toggleDone = function (e) {
-        /*var choice = confirm("Da li želite da završite obradu ovog radnog naloga?");
-        if (choice == true) {
-            //set processed = 2 on assignment
-            $(e).parent().parent().addClass("hidden");
-        }*/
         $.confirm({
             title: "POTVRDA AKCIJE",
             content: "Da li želite da završite obradu ovog radnog naloga?",
@@ -198,6 +193,75 @@ $(function () {
 
 
     /* P */
+
+    AVAIL.currentSearch = 0; //change to 0 on refresh or leave
+    AVAIL.technicianID = 0; //change to 0 on refresh or leave
+
+    $(document).ready(function () {
+        $("#types-search").on('input', function () {
+            var val = this.value;
+            if (val == "") {
+                AVAIL.currentSearch = 0;
+                $(this).parent().parent().find("#search-name").addClass("hidden");
+                $(this).parent().parent().find("#search-button").addClass("hidden");
+                return;
+            }
+            $('#search-types option').each(function () {
+                if (this.value.toUpperCase() === val.toUpperCase()) {
+                    AVAIL.currentSearch = $(this).find("#val").attr("value");
+                }
+            })
+            if (AVAIL.currentSearch == 1) {
+                $(this).parent().parent().find("#search-name").removeClass("hidden");
+            }
+        })
+    });
+
+    $(document).ready(function () {
+        $("#names-search").on('input', function () {
+            var val = this.value;
+            if (val == "") {
+                AVAIL.technicianID = 0;
+                $(this).parent().parent().find("#search-button").addClass("hidden");
+                return;
+            }
+            $('#search-names option').each(function () {
+                if (this.value.toUpperCase() === val.toUpperCase()) {
+                    AVAIL.technicianID = $(this).find("#val").attr("value");
+                }
+            })
+            if (AVAIL.technicianID != 0) {
+                $(this).parent().parent().find("#search-button").removeClass("hidden");
+            }
+        })
+    });
+
+    AVAIL.searchClick = function () {
+        var width = window.innerWidth;
+        if (width < 992) {
+            $("#search-bar").addClass("hidden");
+            $("#p-back").removeClass("hidden");
+        }
+        $("#results").removeClass("hidden");
+        //switch logic here
+        $("#results1").removeClass("hidden");
+        //TODO: fetch data here, inner html spinner on results1 before results come
+        $ajaxUtils.sendGetRequest(
+            "http://avail.azurewebsites.net/api/rezultat/ucinakServisera?id=1",
+            function (responseText) {
+                console.log(responseText);
+            },
+            false
+        );
+        window.scrollTo(0, 0);
+    };
+
+    AVAIL.backP = function () {
+        $("#search-bar").removeClass("hidden");
+        $("*[id^='results']").addClass("hidden");
+        $("#p-back").addClass("hidden");
+        window.scrollTo(0, 0);
+    };
 
 
 
