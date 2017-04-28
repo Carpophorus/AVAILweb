@@ -17,19 +17,26 @@ $(function () {
 
     var AVAIL = {};
 
+    AVAIL.bearer = null;
+
     var tHtml = "snp/t.html";
     var sHtml = "snp/s.html";
     var nHtml = "snp/n.html";
     var pHtml = "snp/p.html";
+
+    var insertHtml = function (selector, html) {
+        var targetElem = document.querySelector(selector);
+        targetElem.innerHTML = html;
+    };
 
     var showLoading = function (selector) {
         var html = "<div id=\"bckgrnd\"></div><div class='loader'></div>";
         insertHtml(selector, html);
     };
 
-    var insertHtml = function (selector, html) {
-        var targetElem = document.querySelector(selector);
-        targetElem.innerHTML = html;
+    var showSmallLoading = function (selector) {
+        var html = "<div class='loader-small'></div>";
+        insertHtml(selector, html);
     };
 
     //TODO: uncomment after development is finished
@@ -187,7 +194,7 @@ $(function () {
                     text: "NE"
                 }
             }
-        })
+        });
     };
 
 
@@ -197,7 +204,7 @@ $(function () {
     AVAIL.currentSearch = 0; //change to 0 on refresh or leave
     AVAIL.technicianID = 0; //change to 0 on refresh or leave
 
-    $(document).ready(function () {
+    AVAIL.registerTypesSearch = function (e) {
         $("#types-search").on('input', function () {
             var val = this.value;
             if (val == "") {
@@ -210,14 +217,15 @@ $(function () {
                 if (this.value.toUpperCase() === val.toUpperCase()) {
                     AVAIL.currentSearch = $(this).find("#val").attr("value");
                 }
-            })
+            });
             if (AVAIL.currentSearch == 1) {
                 $(this).parent().parent().find("#search-name").removeClass("hidden");
             }
-        })
-    });
+        });
+        $(e).remove();
+    };
 
-    $(document).ready(function () {
+    AVAIL.registerNamesSearch = function (e) {
         $("#names-search").on('input', function () {
             var val = this.value;
             if (val == "") {
@@ -229,12 +237,13 @@ $(function () {
                 if (this.value.toUpperCase() === val.toUpperCase()) {
                     AVAIL.technicianID = $(this).find("#val").attr("value");
                 }
-            })
+            });
             if (AVAIL.technicianID != 0) {
                 $(this).parent().parent().find("#search-button").removeClass("hidden");
             }
-        })
-    });
+        });
+        $(e).remove();
+    };
 
     AVAIL.searchClick = function () {
         var width = window.innerWidth;
@@ -243,15 +252,43 @@ $(function () {
             $("#p-back").removeClass("hidden");
         }
         $("#results").removeClass("hidden");
-        //switch logic here
+        //switch logic here for additional queries
         $("#results1").removeClass("hidden");
-        //TODO: fetch data here, inner html spinner on results1 before results come
+        showSmallLoading("#results1");
         $ajaxUtils.sendGetRequest(
-            "https://avail.azurewebsites.net/api/rezultat/ucinakServisera?id=1",
-            function (responseText) {
-                console.log(responseText);
+            "https://avail.azurewebsites.net/api/rezultat/ucinakServisera?id=" + AVAIL.technicianID,
+            function (responseArray) {
+                var sumAux = responseArray[0].pending + responseArray[0].success + responseArray[0].failed + responseArray[0].partial + responseArray[0].cancelled;
+                var sum = sumAux;
+                if (sum == 0) sum = 1;
+                var html = `
+                    <div id="r1title">
+                        Pretraga učinka servisera:
+                        <br><strong>` + responseArray[0].name + `</strong>
+                    </div>
+                    <div id="r1bar">
+                        <div id="r1pending" style="width: ` + responseArray[0].pending / sum + `%"></div>
+                        <div id="r1success" style="width: ` + responseArray[0].success / sum + `%"></div>
+                        <div id="r1partial" style="width: ` + responseArray[0].failed / sum + `%"></div>
+                        <div id="r1failed" style="width: ` + responseArray[0].partial / sum + `%"></div>
+                        <div id="r1cancelled" style="width: ` + responseArray[0].cancelled / sum + `%"></div>
+                    </div>
+                    <div class="row" id="r1stats">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Nezapočetih:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-pending"><span>` + responseArray[0].pending / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].pending + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Uspešnih:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-success"><span>` + responseArray[0].success / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].success + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Delimičnih:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-partial"><span>` + responseArray[0].failed / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].failed + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Neuspešnih:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-failed"><span>` + responseArray[0].partial / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].partial + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Otkazanih:</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-cancelled"><span>` + responseArray[0].cancelled / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].cancelled + `/` + sumAux + `)</div>
+                    </div>
+                `;
+                insertHtml("#results1", html);
             },
-            false
+            true /*, AVAIL.bearer*/
         );
         window.scrollTo(0, 0);
     };

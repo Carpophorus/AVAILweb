@@ -167,6 +167,7 @@ h2 {
     background-color: #333333;
     color: white;
     min-height: 100vh;
+    position: relative;
 }
 
 #main-content>div {
@@ -174,7 +175,8 @@ h2 {
     padding-top: 70px;
 }
 
-#main-content>.loader {
+#main-content>.loader,
+.loader-small {
     background: url('../img/loader.svg') no-repeat;
     width: 100px;
     height: 100px;
@@ -184,6 +186,12 @@ h2 {
     padding-top: 200px;
     padding-bottom: 600px;
     position: relative;
+}
+
+.loader-small {
+    width: 60px;
+    height: 60px;
+    padding-bottom: 200px;
 }
 
 #main-content #bckgrnd {
@@ -264,8 +272,12 @@ h2 {
     z-index: 1031;
 }
 
+#main-content #n {
+    padding-top: 50px;
+}
+
 #nn {
-    margin-bottom: 20px;
+    margin-top: 20px;
     background-color: rgba(255, 255, 255, 0.18);
     border-radius: 5px;
     padding: 15px;
@@ -540,6 +552,27 @@ h2 {
 
 #r1stats-cancelled span {
     color: #7F7F7F;
+}
+
+#team-container {
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.07);
+    border-radius: 30px 0 0 30px;
+    margin-bottom: 40px;
+}
+
+#teams .selected {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+#button-teams {
+    background-color: #A00309;
+    padding: 10px 30px 10px 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    border: 0;
+    border-radius: 5px;
+    float: right;
 }
 
 

@@ -116,60 +116,22 @@
 
     <div id="main-content">
         <div id="bckgrnd"></div>
-        <div id="p">
-            <div class="row" id="search-bar">
-                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" id="search-type">
-                    <input id="types-search" type="search" list="search-types" placeholder="Vrsta pretrage" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Vrsta pretrage'">
-                    <datalist id="search-types">
-                        <option value="Učinak servisera"><div value="1" id="val"></div></option>
-                        <option value="Pretraga 2"><div value="2" id="val"></div></option>
-                        <option value="Pretraga 3"><div value="3" id="val"></div></option>
-                    </datalist>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 hidden" id="search-name">
-                    <input id="names-search" type="search" list="search-names" placeholder="Ime servisera" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime servisera'">
-                    <datalist id="search-names">
-                        <option value="Pera"><div value="1" id="val"></div></option>
-                        <option value="Laza"><div value="2" id="val"></div></option>
-                        <option value="Mika"><div value="3" id="val"></div></option>
-                        <option value="Žika"><div value="4" id="val"></div></option>
-                    </datalist>
-                </div>
-                <div class="col-md-3 col-sm-3 col-sm-2 hidden-lg hidden-xs"></div>
-                <div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 row hidden" id="search-button">
-                    <button class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="button-search" onclick="$AVAIL.searchClick()">
-                        <div id="search-icon"></div>&nbsp;&nbsp;&nbsp;PRETRAGA
-                    </button>
-                </div>
+        <div class="row" id="t">
+            <div class="col-lg-6 col-md-6 left" id="teams">
+                <div class="row selected" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <div class="row" id="team-container"></div>
+                <button id="button-teams">PRERASPODELA</button>
             </div>
-            <div class="hidden" id="results">
-                <div class="hidden" id="results1">
-                    <div id="r1title">
-                        Pretraga učinka servisera:
-                        <br><strong>Petar Petrović</strong>
-                    </div>
-                    <div id="r1bar">
-                        <div id="r1pending" style="width: 2%"></div>
-                        <div id="r1success" style="width: 63%"></div>
-                        <div id="r1partial" style="width: 25%"></div>
-                        <div id="r1failed" style="width: 5%"></div>
-                        <div id="r1cancelled" style="width: 5%"></div>
-                    </div>
-                    <div class="row" id="r1stats">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Nezapočetih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-pending"><span>2%</span>&nbsp;&nbsp;&nbsp;(4/200)</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Uspešnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-success"><span>63%</span>&nbsp;&nbsp;&nbsp;(126/200)</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Delimičnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-partial"><span>25%</span>&nbsp;&nbsp;&nbsp;(50/200)</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Neuspešnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-failed"><span>5%</span>&nbsp;&nbsp;&nbsp;(10/200)</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Otkazanih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-cancelled"><span>5%</span>&nbsp;&nbsp;&nbsp;(10/200)</div>
-                    </div>
-                </div>
+            <div class="col-lg-6 col-md-6 right hidden" id="map">
+                <iframe src="http://maps.google.com/maps?q=51.523765,-0.158612&z=15&output=embed" width="100%" height="450"></iframe>
             </div>
-            <div class="hidden" id="p-back" onclick="$AVAIL.backP()"></div>
         </div>
     </div>
 
