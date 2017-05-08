@@ -39,9 +39,11 @@ $(function () {
         insertHtml(selector, html);
     };
 
+    /*TODO: uncomment when development is done
     document.addEventListener("DOMContentLoaded", function (event) {
         AVAIL.loadT();
     });
+    */
 
 
 
@@ -151,7 +153,7 @@ $(function () {
                 var lat = responseArray[0].latLKL ? responseArray[0].latLKL : 51.523765;
                 var lon = responseArray[0].lonLKL ? responseArray[0].lonLKL : -0.158612;
                 var html = `
-                    <iframe src="http://maps.google.com/maps?q=` + lat + `,` + lon + `&z=15&output=embed" width="100%" height="450"></iframe>
+                    <iframe src="https://maps.google.com/maps?q=` + lat + `,` + lon + `&z=15&output=embed" width="100%" height="450"></iframe>
                     <div id="map-info">
                         <span>` + $(e).parent().text() + ((width < 992) ? `</span><br>` : `</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + Math.abs(lat) + ((lat >= 0) ? `N ` : `S `) + Math.abs(lon) + ((lon >= 0) ? `E` : `W`) + ((width < 992) ? `<br>` : `&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + time +
                     `</div>
