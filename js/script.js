@@ -39,12 +39,11 @@ $(function () {
         insertHtml(selector, html);
     };
 
-    //TODO: uncomment after development is finished
-    /*
     document.addEventListener("DOMContentLoaded", function (event) {
-    	AVAIL.loadT();
+        AVAIL.loadT();
     });
-    */
+
+
 
     /* load main snippets */
 
@@ -122,6 +121,54 @@ $(function () {
 
 
     /* T */
+
+    AVAIL.toggleTeamDetails = function (e) {
+        if ($(e).find("#n-img").hasClass("toggle-off")) {
+            $(e).find("#n-img").removeClass("toggle-off");
+            $(e).find("#n-img").addClass("toggle-on");
+            $(e).parent().addClass("selected");
+            $(e).parent().parent().find("#team-members").removeClass("hidden");
+        } else if ($(e).find("#n-img").hasClass("toggle-on")) {
+            $(e).find("#n-img").addClass("toggle-off");
+            $(e).find("#n-img").removeClass("toggle-on");
+            $(e).parent().removeClass("selected");
+            $(e).parent().parent().find("#team-members").addClass("hidden");
+        }
+    }
+
+    AVAIL.toggleTeamMemberLocation = function (e) {
+        $(document).find("#map").removeClass("hidden");
+        var width = window.innerWidth;
+        if (width < 992) {
+            $(document).find("#d-back").removeClass("hidden");
+            $(document).find("#teams").addClass("hidden");
+        }
+        showSmallLoading("#map");
+        $ajaxUtils.sendGetRequest(
+            "https://avail.azurewebsites.net/api/rezultat/lokacijaServisera?id=" + $(e).parent().attr("value"),
+            function (responseArray) {
+                var time = responseArray[0].timeLKL ? responseArray[0].timeLKL : "00:00:00";
+                var lat = responseArray[0].latLKL ? responseArray[0].latLKL : 51.523765;
+                var lon = responseArray[0].lonLKL ? responseArray[0].lonLKL : -0.158612;
+                var html = `
+                    <iframe src="http://maps.google.com/maps?q=` + lat + `,` + lon + `&z=15&output=embed" width="100%" height="450"></iframe>
+                    <div id="map-info">
+                        <span>` + $(e).parent().text() + ((width < 992) ? `</span><br>` : `</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + Math.abs(lat) + ((lat >= 0) ? `N ` : `S `) + Math.abs(lon) + ((lon >= 0) ? `E` : `W`) + ((width < 992) ? `<br>` : `&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + time +
+                    `</div>
+                `;
+                insertHtml("#map", html);
+            },
+            true /*, AVAIL.bearer*/
+        );
+        window.scrollTo(0, 0);
+    }
+
+    AVAIL.backT = function () {
+        $(document).find("#map").addClass("hidden");
+        $(document).find("#d-back").addClass("hidden");
+        $(document).find("#teams").removeClass("hidden");
+        window.scrollTo(0, 0);
+    }
 
 
 
@@ -204,46 +251,40 @@ $(function () {
     AVAIL.currentSearch = 0; //change to 0 on refresh or leave
     AVAIL.technicianID = 0; //change to 0 on refresh or leave
 
-    AVAIL.registerTypesSearch = function (e) {
-        $("#types-search").on('input', function () {
-            var val = this.value;
-            if (val == "") {
-                AVAIL.currentSearch = 0;
-                $(this).parent().parent().find("#search-name").addClass("hidden");
-                $(this).parent().parent().find("#search-button").addClass("hidden");
-                return;
-            }
-            $('#search-types option').each(function () {
-                if (this.value.toUpperCase() === val.toUpperCase()) {
-                    AVAIL.currentSearch = $(this).find("#val").attr("value");
-                }
-            });
-            if (AVAIL.currentSearch == 1) {
-                $(this).parent().parent().find("#search-name").removeClass("hidden");
+    AVAIL.typesSearch = function (e) {
+        var val = e.value;
+        if (val == "") {
+            AVAIL.currentSearch = 0;
+            $(e).parent().parent().find("#search-name").addClass("hidden");
+            $(e).parent().parent().find("#search-button").addClass("hidden");
+            return;
+        }
+        $('#search-types option').each(function () {
+            if (this.value.toUpperCase() === val.toUpperCase()) {
+                AVAIL.currentSearch = $(this).find("#val").attr("value");
             }
         });
-        $(e).remove();
+        if (AVAIL.currentSearch == 1) {
+            $(e).parent().parent().find("#search-name").removeClass("hidden");
+        }
     };
 
-    AVAIL.registerNamesSearch = function (e) {
-        $("#names-search").on('input', function () {
-            var val = this.value;
-            if (val == "") {
-                AVAIL.technicianID = 0;
-                $(this).parent().parent().find("#search-button").addClass("hidden");
-                return;
-            }
-            $('#search-names option').each(function () {
-                if (this.value.toUpperCase() === val.toUpperCase()) {
-                    AVAIL.technicianID = $(this).find("#val").attr("value");
-                }
-            });
-            if (AVAIL.technicianID != 0) {
-                $(this).parent().parent().find("#search-button").removeClass("hidden");
+    AVAIL.namesSearch = function (e) {
+        var val = e.value;
+        if (val == "") {
+            AVAIL.technicianID = 0;
+            $(e).parent().parent().find("#search-button").addClass("hidden");
+            return;
+        }
+        $('#search-names option').each(function () {
+            if (this.value.toUpperCase() === val.toUpperCase()) {
+                AVAIL.technicianID = $(this).find("#val").attr("value");
             }
         });
-        $(e).remove();
-    };
+        if (AVAIL.technicianID != 0) {
+            $(e).parent().parent().find("#search-button").removeClass("hidden");
+        }
+    }
 
     AVAIL.searchClick = function () {
         var width = window.innerWidth;

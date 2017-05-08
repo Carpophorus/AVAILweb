@@ -2,13 +2,13 @@
 <div id="p">
     <div class="row" id="search-bar">
         <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" id="search-type">
-            <input id="types-search" type="search" list="search-types" placeholder="Vrsta pretrage" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Vrsta pretrage'">
+            <input id="types-search" type="search" list="search-types" placeholder="Vrsta pretrage" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Vrsta pretrage'" oninput="$AVAIL.typesSearch(this)">
             <datalist id="search-types">
                 <option value="Učinak servisera"><div value="1" id="val"></div></option>
             </datalist>
         </div>
         <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 hidden" id="search-name">
-            <input id="names-search" type="search" list="search-names" placeholder="Ime servisera" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime servisera'">
+            <input id="names-search" type="search" list="search-names" placeholder="Ime servisera" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime servisera'" oninput="$AVAIL.namesSearch(this)">
             <datalist id="search-names">
                 <option value="Pera"><div value="1" id="val"></div></option>
                 <option value="Laza"><div value="2" id="val"></div></option>
@@ -29,5 +29,3 @@
     </div>
     <div class="hidden" id="p-back" onclick="$AVAIL.backP()"></div>
 </div>
-<img src="/img/little-script-helper.png" onload="$AVAIL.registerTypesSearch(this)" />
-<img src="/img/little-script-helper.png" onload="$AVAIL.registerNamesSearch(this)" />
