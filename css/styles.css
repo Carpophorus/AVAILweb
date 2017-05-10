@@ -402,18 +402,12 @@ h2 {
 
 #materials {
     width: 90%;
-    border-top: 1px solid #555555;
     padding: 0;
 }
 
-#material,
-#material-last {
+#material {
     padding: 15px 0 15px 0;
-    border-bottom: 1px solid #555555;
-}
-
-#material-last {
-    border: 0;
+    border-top: 1px solid #555555;
 }
 
 #material-name {
@@ -570,7 +564,9 @@ h2 {
     background-color: rgba(255, 255, 255, 0.18);
 }
 
-#button-teams {
+#button-teams,
+#button-addtask,
+#button-canceltask {
     background-color: #A00309;
     padding: 10px 30px 10px 30px;
     font-family: 'Montserrat', sans-serif;
@@ -578,6 +574,21 @@ h2 {
     border: 0;
     border-radius: 5px;
     float: right;
+    margin-left: 18px;
+}
+
+#nt #long-desc {
+    margin-bottom: 0;
+}
+
+#button-addtask,
+#button-canceltask {
+    margin-top: 15px;
+}
+
+#button-canceltask {
+    background-color: rgba(255, 255, 255, 0.18);
+    margin-left: 0;
 }
 
 #team-name {
@@ -686,6 +697,138 @@ h2 {
     font-weight: 700;
 }
 
+#nt div,
+#nt input,
+#nt button,
+#nt textarea {
+    position: relative;
+}
+
+#nt-title {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+#nt input,
+#nt textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.18);
+    border: 0;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+    margin-bottom: 25px;
+}
+
+#nt textarea {
+    min-height: 200px;
+    resize: none;
+    overflow: hidden;
+}
+
+#due-time,
+#picker-container {
+    position: relative;
+}
+
+.form-control {
+    height: inherit;
+    color: inherit;
+    font-size: 16px;
+    line-height: inherit;
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #747474;
+}
+
+.form-control:-moz-placeholder {
+    color: #747474;
+}
+
+.form-control::-moz-placeholder {
+    color: #747474;
+}
+
+.form-control:-ms-input-placeholder {
+    color: #747474;
+}
+
+#ra {
+    position: relative;
+}
+
+#ra>div {
+    margin-bottom: 25px;
+}
+
+#ra div input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.18);
+    border: 0;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+}
+
+#add-team-button,
+#reset-teams-button,
+#button-teams-change {
+    width: 100%;
+    background-color: #A00309;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    border: 0;
+    border-radius: 5px;
+}
+
+#reset-teams-button {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+#changes-container {
+    border: 2px solid rgba(255, 255, 255, 0.07);
+    border-radius: 5px;
+    padding: 0;
+}
+
+#changes-title {
+    background-color: rgba(255, 255, 255, 0.07);
+    text-align: center;
+    padding: 10px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+#ra #ra-last {
+    margin-bottom: 0;
+}
+
+#changes-items>div {
+    margin-bottom: 20px;
+}
+
+#changes-item-name {
+    text-align: right;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0;
+}
+
+#changes-item-name span {
+    font-size: 70%;
+}
+
+#changes-item-dropdown {
+    padding-right: 0;
+}
+
 
 /* END OTHER */
 
@@ -780,6 +923,9 @@ h2 {
     #r1stats div {
         height: 10vh;
         line-height: 10vh;
+    }
+    .form-control {
+        font-size: 3vh;
     }
 }
 

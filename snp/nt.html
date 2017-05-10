@@ -1,0 +1,27 @@
+<div id="bckgrnd"></div>
+<div class="row" id="nt">
+    <div id="nt-title">NOVI&nbsp;ZADATAK</div>
+    <input id="clients-search" type="search" list="search-clients" placeholder="Klijent" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Klijent'" oninput="$AVAIL.clientsSearch(this)">
+    <datalist id="search-clients">
+        <option value="Klijent1"><div value="1" id="val"></div></option>
+        <option value="Klijent2"><div value="2" id="val"></div></option>
+        <option value="Klijent3"><div value="3" id="val"></div></option>
+        <option value="Klijent4"><div value="4" id="val"></div></option>
+    </datalist>
+    <input id="locations-search" type="search" list="search-locations" placeholder="Lokacija" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Lokacija'" oninput="$AVAIL.locationsSearch(this)">
+    <datalist id="search-locations">
+        <option value="Lokacija1"><div value="1" id="val"></div></option>
+        <option value="Lokacija2"><div value="2" id="val"></div></option>
+        <option value="Lokacija3"><div value="3" id="val"></div></option>
+        <option value="Lokacija4"><div value="4" id="val"></div></option>
+    </datalist>
+    <div id="picker-container">
+        <input id="due-time" class="form-control" placeholder="Zakazano vreme" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Zakazano vreme'" onkeydown="return false">
+    </div>
+    <img src="img/little-script-helper.png" onload="$AVAIL.datetimeLoaded(this);">
+    <input id="short-desc" type="text" placeholder="Kratak opis" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Kratak opis'">
+    <textarea id="long-desc" placeholder="Detaljan opis" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Detaljan opis'"></textarea>
+    <img src="img/little-script-helper.png" onload="init();">
+    <button id="button-addtask">NAPRAVI</button>
+    <button id="button-canceltask">OTKAŽI</button>
+</div>

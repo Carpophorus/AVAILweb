@@ -23,6 +23,8 @@ $(function () {
     var sHtml = "snp/s.html";
     var nHtml = "snp/n.html";
     var pHtml = "snp/p.html";
+    var ntHtml = "snp/nt.html";
+    var raHtml = "snp/ra.html";
 
     var insertHtml = function (selector, html) {
         var targetElem = document.querySelector(selector);
@@ -39,11 +41,9 @@ $(function () {
         insertHtml(selector, html);
     };
 
-    /*TODO: uncomment when development is done
     document.addEventListener("DOMContentLoaded", function (event) {
         AVAIL.loadT();
     });
-    */
 
 
 
@@ -124,6 +124,9 @@ $(function () {
 
     /* T */
 
+    AVAIL.datetimeString = "";
+    AVAIL.assignmentArray = [];
+
     AVAIL.toggleTeamDetails = function (e) {
         if ($(e).find("#n-img").hasClass("toggle-off")) {
             $(e).find("#n-img").removeClass("toggle-off");
@@ -170,6 +173,80 @@ $(function () {
         $(document).find("#d-back").addClass("hidden");
         $(document).find("#teams").removeClass("hidden");
         window.scrollTo(0, 0);
+    }
+
+    AVAIL.datetimeLoaded = function (e) {
+        $(function () {
+            $('#due-time').datetimepicker({
+                format: "DD.MM.YYYY. HH:mm"
+            });
+        });
+        $("#due-time").on("dp.show", function () {
+            $("#due-time").data("DateTimePicker").minDate("now");
+        });
+        $("#due-time").on("dp.change", function () {
+            var date = $("#due-time").data("DateTimePicker").viewDate();
+            if (date) {
+                date = date._d;
+                var yearString = date.getFullYear();
+                var month = date.getMonth() + 1;
+                monthString = (month >= 1 && month <= 9) ? ("0" + month) : month;
+                var day = date.getDate();
+                dayString = (day >= 1 && day <= 9) ? ("0" + day) : day;
+                var hours = date.getHours();
+                hoursString = (hours == 0) ? "00" : ((hours >= 1 && hours <= 9) ? ("0" + hours) : hours);
+                var minutes = date.getMinutes();
+                minutesString = (minutes == 0) ? "00" : ((minutes >= 1 && minutes <= 9) ? ("0" + minutes) : minutes);
+                var seconds = date.getSeconds();
+                secondsString = (seconds == 0) ? "00" : ((seconds >= 1 && seconds <= 9) ? ("0" + seconds) : seconds);
+                AVAIL.datetimeString = "" + yearString + "-" + monthString + "-" + dayString + "T" + hoursString + ":" + minutesString + ":" + secondsString;
+            }
+            if ($("#due-time").val() == "") AVAIL.datetimeString = "";
+        });
+        e.remove();
+    }
+
+    AVAIL.newPersonalAssignment = function (e) {
+        AVAIL.assignmentArray = [];
+        AVAIL.assignmentArray.push($(e).parent().attr("value"));
+        //TODO: check if clients and locations loaded, load html here, not from snippet
+        showLoading("#main-content");
+        $ajaxUtils.sendGetRequest(
+            ntHtml,
+            function (responseText) {
+                document.querySelector("#main-content").innerHTML = responseText;
+            },
+            false
+        );
+    }
+
+    AVAIL.newTeamAssignment = function (e) {
+        AVAIL.assignmentArray = [];
+        var selector = $(e).parent().parent().find("#team-members").children();
+        selector.each(function () {
+            AVAIL.assignmentArray.push($(this).attr("value"));
+        });
+        //TODO: check if clients and locations loaded, load html here, not from snippet
+        showLoading("#main-content");
+        $ajaxUtils.sendGetRequest(
+            ntHtml,
+            function (responseText) {
+                document.querySelector("#main-content").innerHTML = responseText;
+            },
+            false
+        );
+    }
+
+    AVAIL.rearrangeTeams = function () {
+        //TODO: load programatically
+        showLoading("#main-content");
+        $ajaxUtils.sendGetRequest(
+            raHtml,
+            function (responseText) {
+                document.querySelector("#main-content").innerHTML = responseText;
+            },
+            false
+        );
     }
 
 
