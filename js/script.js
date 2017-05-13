@@ -280,13 +280,52 @@ $(function () {
         $("#menu-item-2").removeClass("tab-indicator");
         $("#menu-item-3").removeClass("tab-indicator");
         $("#menu-item-4").addClass("tab-indicator");
-        $ajaxUtils.sendGetRequest(
-            pHtml,
-            function (responseText) {
-                document.querySelector("#main-content").innerHTML = responseText;
-            },
-            false
-        );
+        if (AVAIL.techniciansArray == null) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/serviseri",
+                function (responseArray) {
+                    AVAIL.techniciansArray = responseArray;
+                    AVAIL.loadP();
+                },
+                true
+            );
+        } else {
+            var html = `
+                <div id="bckgrnd"></div>
+                <div id="p">
+                    <div class="row" id="search-bar">
+                        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12" id="search-type">
+                            <input id="types-search" type="search" list="search-types" placeholder="Vrsta pretrage" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Vrsta pretrage'" oninput="$AVAIL.typesSearch(this)">
+                            <datalist id="search-types">
+                                <option value="Učinak servisera"><div value="1" id="val"></div></option>
+                            </datalist>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 hidden" id="search-name">
+                            <input id="names-search" type="search" list="search-names" placeholder="Ime servisera" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Ime servisera'" oninput="$AVAIL.namesSearch(this)">
+                            <datalist id="search-names">
+            `;
+            for (var i = 0; i < AVAIL.techniciansArray.length; i++) {
+                html += `<option value="` + AVAIL.techniciansArray[i]["name"] + `"><div value="` + AVAIL.techniciansArray[i]["idTechnician"] + `" id="val"></div></option>`;
+            }
+            html += `
+                            </datalist>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-sm-2 hidden-lg hidden-xs"></div>
+                        <div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 row hidden" id="search-button">
+                            <button class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="button-search" onclick="$AVAIL.searchClick()">
+                                <div id="search-icon"></div>&nbsp;&nbsp;&nbsp;PRETRAGA
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden" id="results">
+                        <div class="hidden" id="results1">
+                        </div>
+                    </div>
+                    <div class="hidden" id="p-back" onclick="$AVAIL.backP()"></div>
+                </div>
+            `;
+            document.querySelector("#main-content").innerHTML = html;
+        }
     };
 
 
