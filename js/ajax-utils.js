@@ -22,6 +22,16 @@
         request.send(null); //for POST only
     };
 
+    ajaxUtils.sendPostRequest = function (requestUrl, responseHandler, isJsonResponse, bearer) {
+        var request = getRequestObject();
+        request.onreadystatechange = function () {
+            handleResponse(request, responseHandler, isJsonResponse);
+        };
+        request.open("POST", requestUrl, true);
+        request.setRequestHeader('Authorization', 'Bearer ' + bearer);
+        request.send(null); //for POST only
+    };
+
     function handleResponse(request, responseHandler, isJsonResponse) {
         if ((request.readyState == 4) &&
             (request.status == 200)) {

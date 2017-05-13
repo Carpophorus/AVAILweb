@@ -19,8 +19,6 @@ $(function () {
 
     AVAIL.bearer = null;
 
-    var tHtml = "snp/t.html";
-    var sHtml = "snp/s.html";
     var nHtml = "snp/n.html";
     var pHtml = "snp/p.html";
     var ntHtml = "snp/nt.html";
@@ -49,6 +47,10 @@ $(function () {
 
     /* load main snippets */
 
+    AVAIL.teamsArray;
+    AVAIL.techniciansArray;
+    AVAIL.vehiclesArray;
+
     AVAIL.loadT = function () {
         window.scrollTo(0, 0);
         showLoading("#main-content");
@@ -56,18 +58,152 @@ $(function () {
         $("#menu-item-2").removeClass("tab-indicator");
         $("#menu-item-3").removeClass("tab-indicator");
         $("#menu-item-4").removeClass("tab-indicator");
-        $ajaxUtils.sendGetRequest(
-            tHtml,
-            function (responseText) {
-                document.querySelector("#main-content").innerHTML = responseText;
-            },
-            false
-        );
-        //TODO: show small loader on #teams (could be static in t.html)
-        //TODO: fetch t data
-
+        if (AVAIL.teamsArray == null) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/timovi",
+                function (responseArray) {
+                    AVAIL.teamsArray = responseArray;
+                    AVAIL.loadT();
+                },
+                true
+            );
+        } else if (AVAIL.techniciansArray == null) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/serviseri",
+                function (responseArray) {
+                    AVAIL.techniciansArray = responseArray;
+                    AVAIL.loadT();
+                },
+                true
+            );
+        } else if (AVAIL.vehiclesArray == null) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/vozila",
+                function (responseArray) {
+                    AVAIL.vehiclesArray = responseArray;
+                    AVAIL.loadT();
+                },
+                true
+            );
+        } else {
+            var html = `
+                <div id="bckgrnd"></div>
+                <div class="row" id="t">
+                    <div class="col-lg-6 col-md-6 left" id="teams">
+            `;
+            for (i = 0; i < AVAIL.teamsArray.length; i++) {
+                var teamName = AVAIL.teamsArray[i]["name"];
+                var teamID = AVAIL.teamsArray[i]["idTeam"];
+                var teamExists = false;
+                for (j = 0; j < AVAIL.techniciansArray.length; j++) {
+                    if (AVAIL.techniciansArray[i]["idTeam"] == teamID) {
+                        teamExists = true;
+                        break;
+                    }
+                }
+                if (teamExists) {
+                    html += `
+                        <div id="team-container-outer">
+                            <div id="team-container">
+                                <div id="team-name" value="` + teamID + `"><span>` + teamName + `</span></div>
+                                <div id="toggle-details-team" onClick="$AVAIL.toggleTeamDetails(this);">
+                                    <div class="toggle-off" id="n-img"></div>
+                                </div>
+                                <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);">
+                                    <div class="toggle-off" id="n-img"></div>
+                                </div>
+                                <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this);">
+                                    <div class="toggle-off" id="n-img"></div>
+                                </div>
+                            </div>
+                            <div class="hidden" id="team-members">
+                    `;
+                    for (i = 0; i < AVAIL.techniciansArray.length; i++) {
+                        if (AVAIL.techniciansArray[i]["idTeam"] == teamID) {
+                            html += `
+                                <div id="team-member" value="` + AVAIL.techniciansArray[i]["idTechnician"] + `">
+                                    ` + AVAIL.techniciansArray[i]["name"] + `
+                                    <div id="toggle-details-team" onClick="$AVAIL.toggleTeamMemberDetails(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                    <div id="toggle-gps" onClick="$AVAIL.toggleTeamMemberLocation(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                    <div id="new-assignment" onClick="$AVAIL.newPersonalAssignment(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            var nullExists = false;
+            for (i = 0; i < AVAIL.techniciansArray.length; i++) {
+                if (AVAIL.techniciansArray[i]["idTeam"] == null) {
+                    nullExists = true;
+                    break;
+                }
+            }
+            if (nullExists) {
+                html += `
+                        <div id="team-container-outer">
+                            <div id="team-container">
+                                <div id="team-name" value="0"><span>&#9670;</span></div>
+                                <div id="toggle-details-team" onClick="$AVAIL.toggleTeamDetails(this);">
+                                    <div class="toggle-off" id="n-img"></div>
+                                </div>
+                                <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);">
+                                    <div class="toggle-off" id="n-img"></div>
+                                </div>
+                                <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this);">
+                                    <div class="toggle-off" id="n-img"></div>
+                                </div>
+                            </div>
+                            <div class="hidden" id="team-members">
+                `;
+                for (i = 0; i < AVAIL.techniciansArray.length; i++) {
+                    if (AVAIL.techniciansArray[i]["idTeam"] == null) {
+                        html += `
+                                <div id="team-member" value="` + AVAIL.techniciansArray[i]["idTechnician"] + `">
+                                    ` + AVAIL.techniciansArray[i]["name"] + `
+                                    <div id="toggle-details-team" onClick="$AVAIL.toggleTeamMemberDetails(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                    <div id="toggle-gps" onClick="$AVAIL.toggleTeamMemberLocation(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                    <div id="new-assignment" onClick="$AVAIL.newPersonalAssignment(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                </div>
+                        `;
+                    }
+                }
+                html += `
+                            </div>
+                        </div>
+                `;
+            }
+            html += `
+                        <button id="button-teams" onclick="$AVAIL.rearrangeTeams()">PRERASPODELA</button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 right hidden" id="map">
+                        <iframe src="https://maps.google.com/maps?q=51.523765,-0.158612&z=15&output=embed" width="100%" height="450"></iframe>
+                    </div>
+                    <div class="hidden" id="d-back" onclick="$AVAIL.backT()"></div>
+                </div>
+            `;
+            document.querySelector("#main-content").innerHTML = html;
+        }
         // if (history.state.state != 1) history.pushState({state: 1}, null, null);
     };
+
+    AVAIL.warehousesArray;
 
     AVAIL.loadS = function () {
         window.scrollTo(0, 0);
@@ -76,15 +212,48 @@ $(function () {
         $("#menu-item-2").addClass("tab-indicator");
         $("#menu-item-3").removeClass("tab-indicator");
         $("#menu-item-4").removeClass("tab-indicator");
-        $ajaxUtils.sendGetRequest(
-            sHtml,
-            function (responseText) {
-                document.querySelector("#main-content").innerHTML = responseText;
-            },
-            false
-        );
-        //TODO: show small loader on #select (could be static in s.html)
-        //TODO: remove static data from s.html, populate #select's inner html with real data and show it (storage first, then alphabetically)
+        if (AVAIL.techniciansArray == null) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/serviseri",
+                function (responseArray) {
+                    AVAIL.techniciansArray = responseArray;
+                    AVAIL.loadS();
+                },
+                true
+            );
+        } else if (AVAIL.warehousesArray == null) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/magacini",
+                function (responseArray) {
+                    AVAIL.warehousesArray = responseArray;
+                    AVAIL.loadS();
+                },
+                true
+            );
+        } else {
+            var html = `
+                <div id="bckgrnd"></div>
+                <div class="row" id="s">
+                    <div class="col-lg-6 col-md-6 left row" id="select">
+            `;
+            for (var i = 0; i < AVAIL.warehousesArray.length; i++) {
+                html += `<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 s-item" onclick="$AVAIL.selectSM(this)" value="` + AVAIL.warehousesArray[i]["idWarehouse"] + `">` + AVAIL.warehousesArray[i]["name"] + `</div>`;
+            }
+            if (AVAIL.techniciansArray.length > 0) {
+                html += `<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="underline"></div>`;
+            }
+            for (var i = 0; i < AVAIL.techniciansArray.length; i++) {
+                html += `<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$AVAIL.selectS(this)" value="` + AVAIL.techniciansArray[i]["idTechnician"] + `">` + AVAIL.techniciansArray[i]["name"] + `</div>`;
+            }
+            html += `
+                    </div>
+                    <div class="col-lg-6 col-md-6 right hidden" id="display">
+                    </div>
+                    <div class="hidden" id="d-back" onclick="$AVAIL.backD()"></div>
+                </div>
+            `;
+            document.querySelector("#main-content").innerHTML = html;
+        }
     };
 
     AVAIL.loadN = function () {
@@ -139,7 +308,7 @@ $(function () {
             $(e).parent().removeClass("selected");
             $(e).parent().parent().find("#team-members").addClass("hidden");
         }
-    }
+    };
 
     AVAIL.toggleTeamMemberLocation = function (e) {
         $(document).find("#map").removeClass("hidden");
@@ -166,14 +335,14 @@ $(function () {
             true /*, AVAIL.bearer*/
         );
         window.scrollTo(0, 0);
-    }
+    };
 
     AVAIL.backT = function () {
         $(document).find("#map").addClass("hidden");
         $(document).find("#d-back").addClass("hidden");
         $(document).find("#teams").removeClass("hidden");
         window.scrollTo(0, 0);
-    }
+    };
 
     AVAIL.datetimeLoaded = function (e) {
         $(function () {
@@ -204,38 +373,188 @@ $(function () {
             if ($("#due-time").val() == "") AVAIL.datetimeString = "";
         });
         e.remove();
-    }
+    };
+
+    AVAIL.clientsArray = [];
+    AVAIL.locationsArray = [];
+    AVAIL.htmlNA = "";
+
+    AVAIL.scrollToTopFix = function (e) {
+        e.remove();
+        window.scrollTo(0, 0);
+    };
+
+    AVAIL.loadNA = function () {
+        window.scrollTo(0, 0);
+        showLoading("#main-content");
+        if (AVAIL.clientsArray.length == 0) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/klijenti",
+                function (responseArray) {
+                    AVAIL.clientsArray = responseArray;
+                    AVAIL.loadNA();
+                },
+                true /*, AVAIL.bearer*/
+            );
+        } else if (AVAIL.locationsArray.length == 0) {
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/lokacije",
+                function (responseArray) {
+                    AVAIL.locationsArray = responseArray;
+                    AVAIL.loadNA();
+                },
+                true /*, AVAIL.bearer*/
+            );
+        } else if (AVAIL.htmlNA == "") {
+            var html = `
+                <div id="bckgrnd"></div>
+                <div class="row" id="nt">
+                    <img src="img/little-script-helper.png" onload="$AVAIL.datetimeLoaded(this);">
+                    <img src="img/little-script-helper.png" onload="init();">
+                    <img src="img/little-script-helper.png" onload="$AVAIL.scrollToTopFix(this);">
+                    <div id="nt-title">NOVI&nbsp;ZADATAK</div>
+                    <input id="clients-search" type="search" list="search-clients" placeholder="Klijent" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Klijent'" oninput="$AVAIL.clientsSearch(this)">
+                    <datalist id="search-clients">
+            `;
+            for (var i = 0; i < AVAIL.clientsArray.length; i++) {
+                html += `
+                        <option value="` + AVAIL.clientsArray[i]["name"] + `"><div value="` + AVAIL.clientsArray[i]["idClient"] + `" id="val"></div></option>
+                `;
+            }
+            html += `
+                    </datalist>
+                    <input id="locations-search" type="search" list="search-locations" placeholder="Lokacija" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Lokacija'" oninput="$AVAIL.locationsSearch(this)">
+                    <datalist id="search-locations">
+            `;
+            for (var i = 0; i < AVAIL.locationsArray.length; i++) {
+                html += `
+                        <option value="` + AVAIL.locationsArray[i]["description"] + `"><div value="` + AVAIL.locationsArray[i]["idLocation"] + `" id="val"></div></option>
+                `;
+            }
+            html += `
+                    </datalist>
+                    <div id="picker-container">
+                        <input id="due-time" class="form-control" placeholder="Zakazano vreme" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Zakazano vreme'" onkeydown="return false">
+                    </div>
+                    <input id="short-desc" type="text" placeholder="Kratak opis" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Kratak opis'">
+                    <textarea id="long-desc" placeholder="Detaljan opis" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Detaljan opis'"></textarea>
+                    <button id="button-addtask" onclick="$AVAIL.makeNA()">NAPRAVI</button>
+                    <button id="button-canceltask" onclick="$AVAIL.cancelNA()">OTKAŽI</button>
+                </div>
+            `;
+            AVAIL.htmlNA = html;
+            document.querySelector("#main-content").innerHTML = html;
+        } else {
+            document.querySelector("#main-content").innerHTML = AVAIL.htmlNA;
+        }
+    };
+
+    AVAIL.assignedClient;
+    AVAIL.assignedLocation;
 
     AVAIL.newPersonalAssignment = function (e) {
+        AVAIL.assignedClient = 0;
+        AVAIL.assignedLocation = 0;
+        AVAIL.loadNA();
         AVAIL.assignmentArray = [];
         AVAIL.assignmentArray.push($(e).parent().attr("value"));
-        //TODO: check if clients and locations loaded, load html here, not from snippet
-        showLoading("#main-content");
-        $ajaxUtils.sendGetRequest(
-            ntHtml,
-            function (responseText) {
-                document.querySelector("#main-content").innerHTML = responseText;
-            },
-            false
-        );
-    }
+    };
 
     AVAIL.newTeamAssignment = function (e) {
+        AVAIL.assignedClient = 0;
+        AVAIL.assignedLocation = 0;
+        AVAIL.loadNA();
         AVAIL.assignmentArray = [];
         var selector = $(e).parent().parent().find("#team-members").children();
         selector.each(function () {
             AVAIL.assignmentArray.push($(this).attr("value"));
         });
-        //TODO: check if clients and locations loaded, load html here, not from snippet
-        showLoading("#main-content");
-        $ajaxUtils.sendGetRequest(
-            ntHtml,
-            function (responseText) {
-                document.querySelector("#main-content").innerHTML = responseText;
-            },
-            false
-        );
-    }
+    };
+
+    AVAIL.clientsSearch = function (e) {
+        var val = e.value;
+        if (val == "") {
+            AVAIL.assignedClient = 0;
+            return;
+        }
+        $('#search-clients option').each(function () {
+            if (this.value.toUpperCase() === val.toUpperCase()) {
+                AVAIL.assignedClient = $(this).find("#val").attr("value");
+            }
+        });
+    };
+
+    AVAIL.locationsSearch = function (e) {
+        var val = e.value;
+        if (val == "") {
+            AVAIL.assignedLocation = 0;
+            return;
+        }
+        $('#search-locations option').each(function () {
+            if (this.value.toUpperCase() === val.toUpperCase()) {
+                AVAIL.assignedLocation = $(this).find("#val").attr("value");
+            }
+        });
+    };
+
+    AVAIL.makeNA = function () {
+        if (AVAIL.assignedClient == 0 || AVAIL.datetimeString == "" || document.getElementById("short-desc").value == "") {
+            $.confirm({
+                title: "GREŠKA",
+                content: "Popunite barem obavezna polja kako biste napravili novi zadatak.<br><br>&bull; Klijent<br>&bull; Zakazano vreme<br>&bull; Kratak opis",
+                buttons: {
+                    confirm: {
+                        text: "OK",
+                        btnClass: "btn-red"
+                    }
+                }
+            });
+        } else {
+            $.confirm({
+                title: "POTVRDA AKCIJE",
+                content: "Da li želite da napravite zadatak za" + ((AVAIL.assignmentArray.length > 1) ? "odabrani tim?" : "odabranog servisera?"),
+                buttons: {
+                    confirm: {
+                        text: "DA",
+                        btnClass: "btn-red",
+                        action: function () {
+                            $ajaxUtils.sendPostRequest(
+                                "https://avail.azurewebsites.net/api/rezultat/noviZadatak?id=" + AVAIL.assignedClient + "&id1=" + ((AVAIL.assignedLocation == 0) ? encodeURIComponent(0) : AVAIL.assignedLocation) + "&timestring=" + encodeURIComponent(AVAIL.datetimeString) + "&shortDescString=" + encodeURIComponent(document.getElementById("short-desc").value) + "&longDescString=" + ((document.getElementById("long-desc").value == "") ? encodeURIComponent(0) : encodeURIComponent(document.getElementById("long-desc").value)),
+                                function (response) {
+                                    console.log(AVAIL.datetimeString);
+                                    console.log(response);
+                                },
+                                true /*, AVAIL.bearer*/
+                            );
+                            AVAIL.loadT();
+                        }
+                    },
+                    cancel: {
+                        text: "NE"
+                    }
+                }
+            });
+        }
+    };
+
+    AVAIL.cancelNA = function () {
+        $.confirm({
+            title: "POTVRDA AKCIJE",
+            content: "Da li želite da odbacite izmene?",
+            buttons: {
+                confirm: {
+                    text: "DA",
+                    btnClass: "btn-red",
+                    action: function () {
+                        AVAIL.loadT();
+                    }
+                },
+                cancel: {
+                    text: "NE"
+                }
+            }
+        });
+    };
 
     AVAIL.rearrangeTeams = function () {
         //TODO: load programatically
@@ -247,24 +566,76 @@ $(function () {
             },
             false
         );
-    }
+    };
 
 
 
     /* S */
 
-    AVAIL.selectS = function (selected_div) {
+    AVAIL.selectSM = function (e) {
+        window.scrollTo(0, 0);
         $(".s-item").removeClass("selected");
-        $(selected_div).addClass("selected");
+        $(e).addClass("selected");
         var width = window.innerWidth;
         if (width < 992) {
             $("#select").addClass("hidden");
             $("#d-back").removeClass("hidden");
         }
         $("#display").removeClass("hidden");
-        //TODO: show small loader on #display
-        //TODO: fetch data, generate html, show it
+        showSmallLoading("#display");
+        $ajaxUtils.sendGetRequest(
+            "https://avail.azurewebsites.net/api/rezultat/podlageriMagacini?id=" + $(e).attr("value"),
+            function (responseArray) {
+                var html;
+                if (responseArray.length == 0) {
+                    html = `Podlager je prazan.`;
+                } else {
+                    for (var i = 0; i < responseArray.length; i++) {
+                        html += `
+                            <div class="d-item">
+                                <div class="d-item-name">` + responseArray[i]["mn"] + `</div>
+                                <div class="d-item-amount">` + responseArray[i]["ma"] + `&nbsp` + responseArray[i]["mu"] + `</div>
+                            </div>
+                        `;
+                    }
+                }
+                document.querySelector("#display").innerHTML = html;
+            },
+            true
+        );
+    };
+
+    AVAIL.selectS = function (e) {
         window.scrollTo(0, 0);
+        $(".s-item").removeClass("selected");
+        $(e).addClass("selected");
+        var width = window.innerWidth;
+        if (width < 992) {
+            $("#select").addClass("hidden");
+            $("#d-back").removeClass("hidden");
+        }
+        $("#display").removeClass("hidden");
+        showSmallLoading("#display");
+        $ajaxUtils.sendGetRequest(
+            "https://avail.azurewebsites.net/api/rezultat/podlageriServiseri?id=" + $(e).attr("value"),
+            function (responseArray) {
+                var html;
+                if (responseArray.length == 0) {
+                    html = `Podlager je prazan.`;
+                } else {
+                    for (var i = 0; i < responseArray.length; i++) {
+                        html += `
+                            <div class="d-item">
+                                <div class="d-item-name">` + responseArray[i]["mn"] + `</div>
+                                <div class="d-item-amount">` + responseArray[i]["ma"] + `&nbsp` + responseArray[i]["mu"] + `</div>
+                            </div>
+                        `;
+                    }
+                }
+                document.querySelector("#display").innerHTML = html;
+            },
+            true
+        );
     };
 
     AVAIL.backD = function () {
