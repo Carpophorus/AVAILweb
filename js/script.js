@@ -20,7 +20,6 @@ $(function () {
     AVAIL.bearer = null;
 
     var nHtml = "snp/n.html";
-    var pHtml = "snp/p.html";
     var ntHtml = "snp/nt.html";
     var raHtml = "snp/ra.html";
 
@@ -237,13 +236,13 @@ $(function () {
                     <div class="col-lg-6 col-md-6 left row" id="select">
             `;
             for (var i = 0; i < AVAIL.warehousesArray.length; i++) {
-                html += `<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 s-item" onclick="$AVAIL.selectSM(this)" value="` + AVAIL.warehousesArray[i]["idWarehouse"] + `">` + AVAIL.warehousesArray[i]["name"] + `</div>`;
+                html += `<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 s-item" onclick="$AVAIL.selectS(this, 0)" value="` + AVAIL.warehousesArray[i]["idWarehouse"] + `">` + AVAIL.warehousesArray[i]["name"] + `</div>`;
             }
             if (AVAIL.techniciansArray.length > 0) {
                 html += `<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="underline"></div>`;
             }
             for (var i = 0; i < AVAIL.techniciansArray.length; i++) {
-                html += `<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$AVAIL.selectS(this)" value="` + AVAIL.techniciansArray[i]["idTechnician"] + `">` + AVAIL.techniciansArray[i]["name"] + `</div>`;
+                html += `<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 s-item" onclick="$AVAIL.selectS(this, 1)" value="` + AVAIL.techniciansArray[i]["idTechnician"] + `">` + AVAIL.techniciansArray[i]["name"] + `</div>`;
             }
             html += `
                     </div>
@@ -611,7 +610,7 @@ $(function () {
 
     /* S */
 
-    AVAIL.selectSM = function (e) {
+    AVAIL.selectS = function (e, b) {
         window.scrollTo(0, 0);
         $(".s-item").removeClass("selected");
         $(e).addClass("selected");
@@ -623,44 +622,11 @@ $(function () {
         $("#display").removeClass("hidden");
         showSmallLoading("#display");
         $ajaxUtils.sendGetRequest(
-            "https://avail.azurewebsites.net/api/rezultat/podlageriMagacini?id=" + $(e).attr("value"),
+            ((b) ? ("https://avail.azurewebsites.net/api/rezultat/podlageriServiseri?id=" + $(e).attr("value")) : ("https://avail.azurewebsites.net/api/rezultat/podlageriMagacini?id=" + $(e).attr("value"))),
             function (responseArray) {
                 var html;
                 if (responseArray.length == 0) {
-                    html = `Podlager je prazan.`;
-                } else {
-                    for (var i = 0; i < responseArray.length; i++) {
-                        html += `
-                            <div class="d-item">
-                                <div class="d-item-name">` + responseArray[i]["mn"] + `</div>
-                                <div class="d-item-amount">` + responseArray[i]["ma"] + `&nbsp` + responseArray[i]["mu"] + `</div>
-                            </div>
-                        `;
-                    }
-                }
-                document.querySelector("#display").innerHTML = html;
-            },
-            true
-        );
-    };
-
-    AVAIL.selectS = function (e) {
-        window.scrollTo(0, 0);
-        $(".s-item").removeClass("selected");
-        $(e).addClass("selected");
-        var width = window.innerWidth;
-        if (width < 992) {
-            $("#select").addClass("hidden");
-            $("#d-back").removeClass("hidden");
-        }
-        $("#display").removeClass("hidden");
-        showSmallLoading("#display");
-        $ajaxUtils.sendGetRequest(
-            "https://avail.azurewebsites.net/api/rezultat/podlageriServiseri?id=" + $(e).attr("value"),
-            function (responseArray) {
-                var html;
-                if (responseArray.length == 0) {
-                    html = `Podlager je prazan.`;
+                    html = `<div style="text-align: center">Podlager je prazan.</div>`;
                 } else {
                     for (var i = 0; i < responseArray.length; i++) {
                         html += `
