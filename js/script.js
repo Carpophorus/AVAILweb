@@ -263,13 +263,23 @@ $(function () {
         $("#menu-item-3").addClass("tab-indicator");
         $("#menu-item-4").removeClass("tab-indicator");
         $ajaxUtils.sendGetRequest(
-            nHtml,
-            function (responseText) {
-                document.querySelector("#main-content").innerHTML = responseText;
+            "https://avail.azurewebsites.net/api/rezultat/nepotvrdjeniRadniNalozi",
+            function (responseArray) {
+                var html;
+                if (responseArray.length == 0) {
+                    html = `
+                        <div id="bckgrnd"></div>
+                        <div class="row" id="n">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: center; padding-top: 65px; color: rgba(255, 255, 255, 0.18)">Nema nepotvrđenih radnih naloga.</div>
+                        </div>
+                    `;
+                } else {
+
+                }
+                document.querySelector("#main-content").innerHTML = html;
             },
-            false
+            true
         );
-        //TODO: fetch n data
     };
 
     AVAIL.loadP = function () {
@@ -406,7 +416,8 @@ $(function () {
                 minutesString = (minutes == 0) ? "00" : ((minutes >= 1 && minutes <= 9) ? ("0" + minutes) : minutes);
                 var seconds = date.getSeconds();
                 secondsString = (seconds == 0) ? "00" : ((seconds >= 1 && seconds <= 9) ? ("0" + seconds) : seconds);
-                AVAIL.datetimeString = "" + yearString + "-" + monthString + "-" + dayString + "T" + hoursString + ":" + minutesString + ":" + secondsString;
+                //AVAIL.datetimeString = "" + yearString + "-" + monthString + "-" + dayString + "T" + hoursString + ":" + minutesString + ":" + secondsString;
+                AVAIL.datetimeString = "" + monthString + "/" + dayString + "/" + yearString + " " + hoursString + ":" + minutesString + ":" + secondsString;
             }
             if ($("#due-time").val() == "") AVAIL.datetimeString = "";
         });
@@ -557,10 +568,16 @@ $(function () {
                         btnClass: "btn-red",
                         action: function () {
                             $ajaxUtils.sendPostRequest(
-                                "https://avail.azurewebsites.net/api/rezultat/noviZadatak?id=" + AVAIL.assignedClient + "&id1=" + ((AVAIL.assignedLocation == 0) ? encodeURIComponent(0) : AVAIL.assignedLocation) + "&timestring=" + encodeURIComponent(AVAIL.datetimeString) + "&shortDescString=" + encodeURIComponent(document.getElementById("short-desc").value) + "&longDescString=" + ((document.getElementById("long-desc").value == "") ? encodeURIComponent(0) : encodeURIComponent(document.getElementById("long-desc").value)),
-                                function (response) {
-                                    console.log(AVAIL.datetimeString);
-                                    console.log(response);
+                                "https://avail.azurewebsites.net/api/rezultat/noviZadatak?id=" + AVAIL.assignedClient + "&id1=" + ((AVAIL.assignedLocation == 0) ? "1" : AVAIL.assignedLocation) + "&timestring=" + encodeURIComponent(AVAIL.datetimeString) + "&shortDescString=" + encodeURIComponent(document.getElementById("short-desc").value) + "&longDescString=" + ((document.getElementById("long-desc").value == "") ? "1" : encodeURIComponent(document.getElementById("long-desc").value)),
+                                function (responseArray) {
+                                    var newTaskID = responseArray[0]["new_i"];
+                                    for (var i = 0; i < AVAIL.assignmentArray.length; i++) {
+                                        $ajaxUtils.sendPostRequest(
+                                            "https://avail.azurewebsites.net/api/rezultat/serviseriZadaci?id=" + newTaskID + "&id1=" + AVAIL.assignmentArray[i],
+                                            function (responseArray) {},
+                                            true /*, AVAIL.bearer*/
+                                        );
+                                    }
                                 },
                                 true /*, AVAIL.bearer*/
                             );
@@ -626,7 +643,7 @@ $(function () {
             function (responseArray) {
                 var html;
                 if (responseArray.length == 0) {
-                    html = `<div style="text-align: center">Podlager je prazan.</div>`;
+                    html = `<div style="text-align: center; padding-top: 50px; color: rgba(255, 255, 255, 0.18)">Podlager je prazan.</div>`;
                 } else {
                     for (var i = 0; i < responseArray.length; i++) {
                         html += `
@@ -763,23 +780,23 @@ $(function () {
                         <br><strong>` + responseArray[0].name + `</strong>
                     </div>
                     <div id="r1bar">
-                        <div id="r1pending" style="width: ` + responseArray[0].pending / sum + `%"></div>
-                        <div id="r1success" style="width: ` + responseArray[0].success / sum + `%"></div>
-                        <div id="r1partial" style="width: ` + responseArray[0].failed / sum + `%"></div>
-                        <div id="r1failed" style="width: ` + responseArray[0].partial / sum + `%"></div>
-                        <div id="r1cancelled" style="width: ` + responseArray[0].cancelled / sum + `%"></div>
+                        <div id="r1pending" style="width: ` + responseArray[0].pending / sum * 100 + `%"></div>
+                        <div id="r1success" style="width: ` + responseArray[0].success / sum * 100 + `%"></div>
+                        <div id="r1partial" style="width: ` + responseArray[0].failed / sum * 100 + `%"></div>
+                        <div id="r1failed" style="width: ` + responseArray[0].partial / sum * 100 + `%"></div>
+                        <div id="r1cancelled" style="width: ` + responseArray[0].cancelled / sum * 100 + `%"></div>
                     </div>
                     <div class="row" id="r1stats">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Nezapočetih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-pending"><span>` + responseArray[0].pending / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].pending + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-pending"><span>` + responseArray[0].pending / sum * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].pending + `/` + sumAux + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Uspešnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-success"><span>` + responseArray[0].success / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].success + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-success"><span>` + responseArray[0].success / sum * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].success + `/` + sumAux + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Delimičnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-partial"><span>` + responseArray[0].failed / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].failed + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-partial"><span>` + responseArray[0].failed / sum * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].failed + `/` + sumAux + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Neuspešnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-failed"><span>` + responseArray[0].partial / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].partial + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-failed"><span>` + responseArray[0].partial / sum * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].partial + `/` + sumAux + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Otkazanih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-cancelled"><span>` + responseArray[0].cancelled / sum + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].cancelled + `/` + sumAux + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-cancelled"><span>` + responseArray[0].cancelled / sum * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].cancelled + `/` + sumAux + `)</div>
                     </div>
                 `;
                 insertHtml("#results1", html);
