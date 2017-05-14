@@ -19,8 +19,6 @@ $(function () {
 
     AVAIL.bearer = null;
 
-    var nHtml = "snp/n.html";
-    var ntHtml = "snp/nt.html";
     var raHtml = "snp/ra.html";
 
     var insertHtml = function (selector, html) {
@@ -274,7 +272,75 @@ $(function () {
                         </div>
                     `;
                 } else {
-
+                    html = `
+                        <div id="bckgrnd"></div>
+                        <div class="row" id="n">
+                    `;
+                    for (var i = 0; i < responseArray.length; i++) {
+                        html += `
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="status-` + responseArray[i]["status"] + `" id="nn">
+                                    <span id="idA">` + responseArray[i]["idAssignment"] + `</span>
+                                    <br class="hidden-lg hidden-md"><span id="cn">` + responseArray[i]["name"] + `</span>
+                                    <br class="hidden-lg hidden-md"><span id="tn">` + responseArray[i]["tn"] + `</span>
+                                    <div id="toggle-details" onClick="$AVAIL.toggleDetails(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                    <div id="toggle-materials" onClick="$AVAIL.toggleMaterials(this);">
+                                        <div class="toggle-off" id="n-img"></div>
+                                    </div>
+                                    <div id="toggle-done" onClick="$AVAIL.toggleDone(this);">
+                                        <div id="n-img"></div>
+                                    </div>
+                                </div>
+                                <div class="row hidden" id="details">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <strong>Klijent:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["name"] + `<br>` + responseArray[i]["address"] + `</div>
+                                        <br><strong>Lokacija:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["description"] + `</div>
+                                        <br><strong>Zakazano vreme:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["dueTime"] + `</div>
+                                        <br><strong>Kratak opis: </strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["shortDesc"] + `</div>
+                                        <br><strong>Detaljan opis: </strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["longDesc"] + `</div>
+                                    </div>
+                                    <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                        <strong>Serviser:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["tn"] + `</div>
+                                        <br><strong>Vreme početka:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["startTime"] + `</div>
+                                        <br><strong>Vreme kraja:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["endTime"] + `</div>
+                                        <br><strong>Lokacija početka:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["startLat"] + ((responseArray[i]["startLat"] >= 0) ? `N&nbsp;` : `S&nbsp;`) + responseArray[i]["startLon"] + ((responseArray[i]["startLon"] >= 0) ? `E&nbsp;` : `W&nbsp;`) + `</div>
+                                        <br><strong>Lokacija kraja:</strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["endLat"] + ((responseArray[i]["endLat"] >= 0) ? `N&nbsp;` : `S&nbsp;`) + responseArray[i]["endLon"] + ((responseArray[i]["endLon"] >= 0) ? `E&nbsp;` : `W&nbsp;`) + `</div>
+                                        <br><strong>Napomena: </strong>
+                                        <br>
+                                        <div class="indented">` + responseArray[i]["comment"] + `</div>
+                                    </div>
+                                </div>
+                                <div class="row hidden" id="materials">
+                                </div>
+                            </div>
+                        `;
+                    }
+                    html += `
+                        </div>
+                    `;
                 }
                 document.querySelector("#main-content").innerHTML = html;
             },
@@ -693,7 +759,34 @@ $(function () {
             $(e).find("#n-img").removeClass("toggle-on");
             $(e).parent().parent().find("#materials").addClass("hidden");
         }
-        //if materials contains loader, fetch data and show it
+        if (!$.trim($(e).parent().parent().find("#materials").html()).length) {
+            $(e).parent().parent().find("#materials").html("<div class='loader-small' style='padding-top: 61px; padding-bottom: 61px'></div>");
+            $ajaxUtils.sendGetRequest(
+                "https://avail.azurewebsites.net/api/rezultat/potroseniMaterijalPoRadnomNalogu?id=" + $(e).parent().find("#idA").text(),
+                function (responseArray) {
+                    var html;
+                    if (responseArray.length == 0) {
+                        html = `<div style="text-align: center; padding-top: 50px; padding-bottom: 50px; color: rgba(255, 255, 255, 0.18)">Nema potrošenog materijala.</div>`;
+                    } else {
+                        for (var i = 0; i < responseArray.length; i++) {
+                            html += `
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="material">
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-name">
+                                    <strong>` + responseArray[i]["mn"] + `</strong>
+                                </div>
+                                <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="material-amount">
+                                    ` + responseArray[i]["ma"] + ` ` + responseArray[i]["mu"] + `
+                                </div>
+                            </div>
+                        `;
+                        }
+                    }
+                    $(e).parent().parent().find("#materials").html(html);
+                },
+                true
+            );
+        }
     };
 
     AVAIL.toggleDone = function (e) {
@@ -705,8 +798,12 @@ $(function () {
                     text: "DA",
                     btnClass: "btn-red",
                     action: function () {
-                        //set processed = 2 on assignment
                         $(e).parent().parent().addClass("hidden");
+                        $ajaxUtils.sendPostRequest(
+                            "https://avail.azurewebsites.net/api/rezultat/potvrdaRadnogNaloga?id=" + $(e).parent().find("#idA").text(),
+                            function (responseArray) {},
+                            true
+                        );
                     }
                 },
                 cancel: {
