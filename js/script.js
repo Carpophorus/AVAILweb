@@ -3,7 +3,6 @@
 // implement browser history
 // add bearer tokens for api calls
 // technician/team name for na confirmation prompt
-// check all input fields for dataset presence before sending api requests and prompt accordingly
 
 
 
@@ -713,6 +712,8 @@ $(function () {
 
     AVAIL.techniciansDirty = false;
     AVAIL.vehiclesDirty = false;
+    AVAIL.techniciansArrayCopy;
+    AVAIL.vehiclesArrayCopy;
 
     AVAIL.loadRA = function () {
         window.scrollTo(0, 0);
@@ -750,6 +751,8 @@ $(function () {
             AVAIL.pendingDeletion = 0;
             AVAIL.pendingDeletionName = "";
             var optionsWithoutUnassigned = "";
+            AVAIL.techniciansArrayCopy = JSON.parse(JSON.stringify(AVAIL.techniciansArray));
+            AVAIL.vehiclesArrayCopy = JSON.parse(JSON.stringify(AVAIL.vehiclesArray));
             for (var i = 0; i < AVAIL.teamsArray.length; i++) {
                 optionsWithoutUnassigned += "<option value='" + AVAIL.teamsArray[i]["name"] + "'><div value='" + AVAIL.teamsArray[i]["idTeam"] + "' x='" + i + "' id='team-val'></div></option>";
             }
@@ -1006,10 +1009,16 @@ $(function () {
     AVAIL.techniciansUpdate = function (e) {
         var val = e.value;
         if (val == "") {
+            console.log(AVAIL.techniciansArray);
+            console.log(AVAIL.techniciansArrayCopy);
+            var indexTech = $(e).parent().parent().find("#changes-item-name").attr("x");
+            AVAIL.techniciansArray[indexTech]["idTeam"] = AVAIL.techniciansArrayCopy[indexTech]["idTeam"];
             return;
         }
         $('#team-selection option').each(function () {
             if (this.value.toUpperCase() === val.toUpperCase()) {
+                console.log(AVAIL.techniciansArray);
+                console.log(AVAIL.techniciansArrayCopy);
                 var teamID = $(this).find("#team-val").attr("value");
                 if (teamID == 0) teamID = null;
                 var indexTech = $(e).parent().parent().find("#changes-item-name").attr("x");
@@ -1023,6 +1032,8 @@ $(function () {
     AVAIL.vehiclesUpdate = function (e) {
         var val = e.value;
         if (val == "") {
+            var indexVeh = $(e).parent().parent().find("#changes-item-name").attr("x");
+            AVAIL.vehiclesArray[indexVeh]["idTeam"] = AVAIL.vehiclesArrayCopy[indexVeh]["idTeam"];
             return;
         }
         $('#team-selection option').each(function () {
