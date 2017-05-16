@@ -217,6 +217,16 @@ h2 {
     padding-left: 50px;
 }
 
+.small-left {
+    padding-left: 0;
+    padding-right: 15px;
+}
+
+.small-right {
+    padding-left: 15px;
+    padding-right: 0;
+}
+
 .row {
     margin: 0;
 }
@@ -461,10 +471,15 @@ h2 {
     display: inline-block;
 }
 
+#results {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 #r1title {
     text-align: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
+    margin-top: 20px;
+    margin-bottom: 35px;
     position: relative;
 }
 
@@ -479,38 +494,36 @@ h2 {
 }
 
 #r1pending {
-    border-radius: 2.5px 0 0 2.5px;
     background-color: #7F7F7F;
-    border-right: 0.1px solid #333333;
+    /*border-right: 0.1px solid #333333;*/
 }
 
 #r1success {
     background-color: #00A02A;
-    border-right: 0.1px solid #333333;
-    border-left: 0.1px solid #333333;
+    /*border-right: 0.1px solid #333333;
+    border-left: 0.1px solid #333333;*/
 }
 
 #r1partial {
     background-color: #0B6AA0;
-    border-right: 0.1px solid #333333;
-    border-left: 0.1px solid #333333;
+    /*border-right: 0.1px solid #333333;
+    border-left: 0.1px solid #333333;*/
 }
 
 #r1failed {
     background-color: #D2040C;
-    border-right: 0.1px solid #333333;
-    border-left: 0.1px solid #333333;
+    /*border-right: 0.1px solid #333333;
+    border-left: 0.1px solid #333333;*/
 }
 
 #r1cancelled {
-    border-radius: 0 2.5px 2.5px 0;
     background-color: #7F7F7F;
-    border-left: 0.1px solid #333333;
+    /*border-left: 0.1px solid #333333;*/
 }
 
 #r1bar {
     height: 5px;
-    border-radius: 2.5px;
+    overflow: hidden;
     margin-bottom: 30px;
     position: relative;
     background-color: #7F7F7F;
@@ -572,9 +585,7 @@ h2 {
     background-color: rgba(255, 255, 255, 0.18);
 }
 
-#button-teams,
-#button-addtask,
-#button-canceltask {
+#button-teams {
     background-color: #A00309;
     padding: 10px 30px 10px 30px;
     font-family: 'Montserrat', sans-serif;
@@ -585,16 +596,29 @@ h2 {
     margin-left: 18px;
 }
 
+#button-addtask,
+#button-canceltask,
+#button-cancelra {
+    background-color: #A00309;
+    padding: 10px 0 10px 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    border: 0;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#button-cancelra {
+    margin-top: 0;
+}
+
 #nt #long-desc {
     margin-bottom: 0;
 }
 
-#button-addtask,
-#button-canceltask {
-    margin-top: 15px;
-}
-
-#button-canceltask {
+#button-canceltask,
+#button-cancelra {
     background-color: rgba(255, 255, 255, 0.18);
     margin-left: 0;
 }
@@ -607,12 +631,6 @@ h2 {
     width: 25%;
     margin-left: 60px;
     float: left;
-}
-
-#team-name>span {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
 }
 
 #team-vehicle {
@@ -785,7 +803,7 @@ h2 {
 }
 
 #add-team-button,
-#reset-teams-button,
+#delete-team-button,
 #button-teams-change {
     width: 100%;
     background-color: #A00309;
@@ -796,7 +814,18 @@ h2 {
     border-radius: 5px;
 }
 
-#reset-teams-button {
+#add-team-button,
+#delete-team-button {
+    background: url('../img/add.svg') no-repeat;
+    background-size: 25px 25px;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+#delete-team-button {
+    background: url('../img/delete.svg') no-repeat;
+    background-size: 25px 25px;
+    background-position: center;
     background-color: rgba(255, 255, 255, 0.18);
 }
 
@@ -818,6 +847,10 @@ h2 {
     margin-bottom: 0;
 }
 
+#ra #ra-last-chg {
+    margin-bottom: 0;
+}
+
 #changes-items>div {
     margin-bottom: 20px;
 }
@@ -835,6 +868,14 @@ h2 {
 
 #changes-item-dropdown {
     padding-right: 0;
+}
+
+#toggle-reset .toggle-off {
+    background: url('../img/reset.svg') no-repeat;
+    background-size: auto 100%;
+    position: absolute;
+    right: 15px;
+    top: 8px;
 }
 
 
@@ -934,6 +975,15 @@ h2 {
     }
     .form-control {
         font-size: 3vh;
+    }
+    .small-left {
+        padding-right: 0;
+    }
+    .small-right {
+        padding-left: 0;
+    }
+    #ra #ra-last-chg {
+        margin-bottom: 25px;
     }
 }
 
