@@ -1,3 +1,12 @@
+// TODO:
+
+// implement browser history
+// add bearer tokens for api calls
+// technician/team name for na confirmation prompt
+// check all input fields for dataset presence before sending api requests and prompt accordingly
+
+
+
 $(function () {
     $("#navbarToggle").blur(function (event) {
         var width = window.innerWidth;
@@ -60,7 +69,7 @@ $(function () {
                     AVAIL.teamsArray = responseArray;
                     AVAIL.loadT();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else if (AVAIL.techniciansArray == null || AVAIL.techniciansDirty) {
             $ajaxUtils.sendGetRequest(
@@ -70,7 +79,7 @@ $(function () {
                     AVAIL.techniciansDirty = false;
                     AVAIL.loadT();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else if (AVAIL.vehiclesArray == null || AVAIL.vehiclesDirty) {
             $ajaxUtils.sendGetRequest(
@@ -80,7 +89,7 @@ $(function () {
                     AVAIL.vehiclesDirty = false;
                     AVAIL.loadT();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else {
             var html = `
@@ -228,7 +237,7 @@ $(function () {
                     AVAIL.techniciansArray = responseArray;
                     AVAIL.loadS();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else if (AVAIL.warehousesArray == null) {
             $ajaxUtils.sendGetRequest(
@@ -237,7 +246,7 @@ $(function () {
                     AVAIL.warehousesArray = responseArray;
                     AVAIL.loadS();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else {
             var html = `
@@ -356,7 +365,7 @@ $(function () {
                 }
                 document.querySelector("#main-content").innerHTML = html;
             },
-            true
+            true /*, AVAIL.bearer*/
         );
     };
 
@@ -377,7 +386,7 @@ $(function () {
                     AVAIL.techniciansArray = responseArray;
                     AVAIL.loadP();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else {
             AVAIL.currentSearch = 0;
@@ -652,7 +661,7 @@ $(function () {
         } else {
             $.confirm({
                 title: "POTVRDA AKCIJE",
-                content: "Da li želite da napravite zadatak za " + ((AVAIL.assignmentArray.length > 1) ? "odabrani tim?" : "odabranog servisera?"), //TODO: append team/technician name in ()
+                content: "Da li želite da napravite zadatak za " + ((AVAIL.assignmentArray.length > 1) ? "odabrani tim?" : "odabranog servisera?"), //TODO: append team/technician name in () or bullet
                 buttons: {
                     cancel: {
                         text: "NE"
@@ -716,7 +725,7 @@ $(function () {
                     AVAIL.techniciansDirty = false;
                     AVAIL.loadRA();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else if (AVAIL.vehiclesArray == null || AVAIL.vehiclesDirty) {
             $ajaxUtils.sendGetRequest(
@@ -726,7 +735,7 @@ $(function () {
                     AVAIL.vehiclesDirty = false;
                     AVAIL.loadRA();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else if (AVAIL.teamsArray == null) {
             $ajaxUtils.sendGetRequest(
@@ -735,12 +744,9 @@ $(function () {
                     AVAIL.teamsArray = responseArray;
                     AVAIL.loadRA();
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         } else {
-            console.log(AVAIL.teamsArray); //console 4delete
-            console.log(AVAIL.techniciansArray); //console 4delete
-            console.log(AVAIL.vehiclesArray); //console 4delete
             AVAIL.pendingDeletion = 0;
             AVAIL.pendingDeletionName = "";
             var optionsWithoutUnassigned = "";
@@ -879,7 +885,7 @@ $(function () {
                                         AVAIL.loadRA();
                                     }
                                 },
-                                true
+                                true /*, AVAIL.bearer*/
                             );
                         }
                     }
@@ -913,7 +919,7 @@ $(function () {
                                         AVAIL.loadRA();
                                     }
                                 },
-                                true
+                                true /*, AVAIL.bearer*/
                             );
                         }
                     }
@@ -940,7 +946,7 @@ $(function () {
                                 AVAIL.teamsArray = null;
                                 AVAIL.loadRA();
                             },
-                            true
+                            true /*, AVAIL.bearer*/
                         );
                     }
                 }
@@ -950,8 +956,6 @@ $(function () {
 
     AVAIL.pendingDeletion = 0;
     AVAIL.pendingDeletionName = "";
-    /*AVAIL.deletedTeamResetCount;
-    AVAIL.deletedTeamResetCountAux;*/
 
     AVAIL.teamDeletePending = function (e) {
         var val = e.value;
@@ -987,40 +991,11 @@ $(function () {
                         $ajaxUtils.sendPostRequest(
                             "https://avail.azurewebsites.net/api/rezultat/obrisiTim?id=" + AVAIL.pendingDeletion,
                             function (responseArray) {
-                                /*AVAIL.deletedTeamResetCount = 0;
-                                AVAIL.deletedTeamResetCountAux = 0;
-                                var tIDArray = [];
-                                for (var i = 0; i < AVAIL.techniciansArray.length; i++) {
-                                    if (AVAIL.techniciansArray[i]["idTeam"] == AVAIL.pendingDeletion) {
-                                        AVAIL.deletedTeamResetCount++;
-                                        tIDArray.push(AVAIL.techniciansArray[i]["idTeam"]);
-                                    }
-                                }
-                                if (AVAIL.deletedTeamResetCount > 0) {
-                                    for (var i = 0; i < AVAIL.deletedTeamResetCount; i++) {
-                                        $ajaxUtils.sendPostRequest(
-                                            "https://avail.azurewebsites.net/api/rezultat/obrisiTim?id=" + tIDArray[i],
-                                            function (responseArray) {
-                                                AVAIL.deletedTeamResetCountAux++;
-                                                if (AVAIL.deletedTeamResetCount == AVAIL.deletedTeamResetCountAux) {
-                                                    AVAIL.teamsArray = null;
-                                                    AVAIL.techniciansArray = null;
-                                                    AVAIL.loadRA();
-                                                }
-                                            },
-                                            true
-                                        );
-                                    }
-                                } else {
-                                    AVAIL.teamsArray = null;
-                                    AVAIL.techniciansArray = null;
-                                    AVAIL.loadRA();
-                                }*/
                                 AVAIL.teamsArray = null;
                                 AVAIL.techniciansArray = null;
                                 AVAIL.loadRA();
                             },
-                            true
+                            true /*, AVAIL.bearer*/
                         );
                     }
                 }
@@ -1114,7 +1089,7 @@ $(function () {
                                                 AVAIL.loadT();
                                             }
                                         },
-                                        true
+                                        true /*, AVAIL.bearer*/
                                     );
                                 } else {
                                     $ajaxUtils.sendPostRequest(
@@ -1127,7 +1102,7 @@ $(function () {
                                                 AVAIL.loadT();
                                             }
                                         },
-                                        true
+                                        true /*, AVAIL.bearer*/
                                     );
                                 }
                             }
@@ -1145,7 +1120,7 @@ $(function () {
                                                 AVAIL.loadT();
                                             }
                                         },
-                                        true
+                                        true /*, AVAIL.bearer*/
                                     );
                                 } else {
                                     $ajaxUtils.sendPostRequest(
@@ -1158,7 +1133,7 @@ $(function () {
                                                 AVAIL.loadT();
                                             }
                                         },
-                                        true
+                                        true /*, AVAIL.bearer*/
                                     );
                                 }
                             }
@@ -1202,7 +1177,7 @@ $(function () {
                 }
                 document.querySelector("#display").innerHTML = html;
             },
-            true
+            true /*, AVAIL.bearer*/
         );
     };
 
@@ -1264,7 +1239,7 @@ $(function () {
                     }
                     $(e).parent().parent().find("#materials").html(html);
                 },
-                true
+                true /*, AVAIL.bearer*/
             );
         }
     };
@@ -1285,7 +1260,7 @@ $(function () {
                         $ajaxUtils.sendPostRequest(
                             "https://avail.azurewebsites.net/api/rezultat/potvrdaRadnogNaloga?id=" + $(e).parent().find("#idA").text(),
                             function (responseArray) {},
-                            true
+                            true /*, AVAIL.bearer*/
                         );
                     }
                 }
@@ -1360,15 +1335,15 @@ $(function () {
                     </div>
                     <div class="row" id="r1stats">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Nezapočetih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-pending"><span>` + responseArray[0].pending / ((!sum) ? 1 : sum) * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].pending + `/` + sum + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-pending"><span>` + (responseArray[0].pending / ((!sum) ? 1 : sum) * 100).toFixed(2) + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].pending + `/` + sum + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Uspešnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-success"><span>` + responseArray[0].success / ((!sum) ? 1 : sum) * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].success + `/` + sum + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-success"><span>` + (responseArray[0].success / ((!sum) ? 1 : sum) * 100).toFixed(2) + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].success + `/` + sum + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Delimičnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-partial"><span>` + responseArray[0].failed / ((!sum) ? 1 : sum) * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].failed + `/` + sum + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-partial"><span>` + (responseArray[0].failed / ((!sum) ? 1 : sum) * 100).toFixed(2) + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].failed + `/` + sum + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Neuspešnih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-failed"><span>` + responseArray[0].partial / ((!sum) ? 1 : sum) * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].partial + `/` + sum + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-failed"><span>` + (responseArray[0].partial / ((!sum) ? 1 : sum) * 100).toFixed(2) + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].partial + `/` + sum + `)</div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-title">Otkazanih:</div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-cancelled"><span>` + responseArray[0].cancelled / ((!sum) ? 1 : sum) * 100 + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].cancelled + `/` + sum + `)</div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="r1stats-cancelled"><span>` + (responseArray[0].cancelled / ((!sum) ? 1 : sum) * 100).toFixed(2) + `%</span>&nbsp;&nbsp;&nbsp;(` + responseArray[0].cancelled + `/` + sum + `)</div>
                     </div>
                 `;
                 insertHtml("#results1", html);
@@ -1385,212 +1360,6 @@ $(function () {
         window.scrollTo(0, 0);
     };
 
-
-
-    // document.addEventListener("DOMContentLoaded", function (event) {
-    // 	$ajaxUtils.sendGetRequest(
-    // 		homeHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	if(history.state) {
-    // 		var snp = null;
-    // 		if(history.state) {
-    // 			if(history.state.state) {
-    // 				switch(history.state.state) {
-    // 					case 1:
-    // 						snp = homeHtml;
-    // 						break;
-    // 					case 2:
-    // 						snp = registerHtml;
-    // 						break;
-    // 					case 3:
-    // 						snp = newsHtml;
-    // 						break;
-    // 					case 4:
-    // 						snp = aboutHtml;
-    // 						break;
-    // 					case 5:
-    // 						snp = contactHtml;
-    // 						break;
-    // 					case 1001:
-    // 						snp = researchHtml;
-    // 						break;
-    // 					case 1002:
-    // 						snp = valuesHtml;
-    // 						break;
-    // 					case 1003:
-    // 						snp = mwHtml;
-    // 						break;
-    // 					case 1004:
-    // 						snp = mediaHtml;
-    // 						break;
-    // 					default:
-    // 						snp = null;
-    // 				}
-    // 			}
-    // 		}
-    // 		if(snp) {
-    // 			$ajaxUtils.sendGetRequest(
-    // 				snp,
-    // 				function (responseText) {
-    // 					document.querySelector("#main-content").innerHTML = responseText;
-    // 				},
-    // 				false
-    // 			);
-    // 			window.scrollTo(0,0);
-    // 		}
-    // 	}
-    // 	else history.replaceState({state: 1}, null, null);
-    // 	window.scrollTo(0,0);
-    // });
-
-    // AVAIL.loadHome = function () {
-    // 	showLoading("#main-content", "home");
-    // 	$ajaxUtils.sendGetRequest(
-    // 		homeHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	if (history.state.state != 1) history.pushState({state: 1}, null, null);
-    // 	window.scrollTo(0,0);
-    // };
-
-    // AVAIL.loadRegister = function () {
-    // 	showLoading("#main-content", "register");
-    // 	$ajaxUtils.sendGetRequest(
-    // 		registerHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	if (history.state.state != 2) history.pushState({state: 2}, null, null);
-    // 	window.scrollTo(0,0);
-    // };
-
-    // AVAIL.loadNews = function () {
-    // 	showLoading("#main-content", "news");
-    // 	$ajaxUtils.sendGetRequest(
-    // 		newsHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	if (history.state.state != 3) history.pushState({state: 3}, null, null);
-    // 	window.scrollTo(0,0);
-    // };
-
-    // AVAIL.loadAbout = function () {
-    // 	showLoading("#main-content", "about");
-    // 	$ajaxUtils.sendGetRequest(
-    // 		aboutHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	if (history.state.state != 4) history.pushState({state: 4}, null, null);
-    // 	window.scrollTo(0,0);
-    // };
-
-    // AVAIL.loadContact = function () {
-    // 	showLoading("#main-content", "contact");
-    // 	$ajaxUtils.sendGetRequest(
-    // 		contactHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	if (history.state.state != 5) history.pushState({state: 5}, null, null);
-    // 	window.scrollTo(0,0);
-    // };
-
-    // AVAIL.loadPiece = function (articleNumber) {
-    // 	showLoading("#main-content", "news");
-    // 	var articleHtml;
-    // 	switch(articleNumber) {
-    // 		case 1:
-    // 			articleHtml = researchHtml;
-    // 			history.pushState({state: 1001}, null, null);
-    // 			break;
-    // 		case 2:
-    // 			articleHtml = valuesHtml;
-    // 			history.pushState({state: 1002}, null, null);
-    // 			break;
-    // 		case 3:
-    // 			articleHtml = mwHtml;
-    // 			history.pushState({state: 1003}, null, null);
-    // 			break;
-    // 		case 4:
-    // 			articleHtml = mediaHtml;
-    // 			history.pushState({state: 1004}, null, null);
-    // 			break;
-    // 		default:
-    // 			articleHtml = null;
-    // 	}
-    // 	$ajaxUtils.sendGetRequest(
-    // 		articleHtml,
-    // 		function (responseText) {
-    // 			document.querySelector("#main-content").innerHTML = responseText;
-    // 		},
-    // 		false
-    // 	);
-    // 	window.scrollTo(0,0);
-    // }
-
-    // window.onpopstate = function (event) {
-    // 	var snp = null;
-    // 	if(event.state.state) {
-    // 		switch(event.state.state) {
-    // 			case 1:
-    // 				snp = homeHtml;
-    // 				break;
-    // 			case 2:
-    // 				snp = registerHtml;
-    // 				break;
-    // 			case 3:
-    // 				snp = newsHtml;
-    // 				break;
-    // 			case 4:
-    // 				snp = aboutHtml;
-    // 				break;
-    // 			case 5:
-    // 				snp = contactHtml;
-    // 				break;
-    // 			case 1001:
-    // 				snp = researchHtml;
-    // 				break;
-    // 			case 1002:
-    // 				snp = valuesHtml;
-    // 				break;
-    // 			case 1003:
-    // 				snp = mwHtml;
-    // 				break;
-    // 			case 1004:
-    // 				snp = mediaHtml;
-    // 				break;
-    // 			default:
-    // 				snp = null;
-    // 		}
-    // 	}
-    // 	if(snp) {
-    // 		$ajaxUtils.sendGetRequest(
-    // 			snp,
-    // 			function (responseText) {
-    // 				document.querySelector("#main-content").innerHTML = responseText;
-    // 			},
-    // 			false
-    // 		);
-    // 		window.scrollTo(0,0);
-    // 	}
-    // }
-
     global.$AVAIL = AVAIL;
+
 })(window);
