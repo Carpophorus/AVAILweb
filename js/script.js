@@ -1,5 +1,7 @@
 // TODO:
 
+// change date formats (and in android)
+// limit gps coordinates to 5 decimal places
 // implement browser history
 // add bearer tokens for api calls
 // technician/team name for na confirmation prompt
