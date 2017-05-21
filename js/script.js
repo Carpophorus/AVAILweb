@@ -1,10 +1,7 @@
 // TODO:
 
-// change date formats (and in android)
-// limit gps coordinates to 5 decimal places
 // implement browser history
 // add bearer tokens for api calls
-// technician/team name for na confirmation prompt
 
 
 
@@ -131,7 +128,7 @@ $(function () {
                                 <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
-                                <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this);">
+                                <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this, '` + teamName + `');">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
                             </div>
@@ -148,7 +145,7 @@ $(function () {
                                     <div id="toggle-gps" onClick="$AVAIL.toggleTeamMemberLocation(this);">
                                         <div class="toggle-off" id="n-img"></div>
                                     </div>
-                                    <div id="new-assignment" onClick="$AVAIL.newPersonalAssignment(this);">
+                                    <div id="new-assignment" onClick="$AVAIL.newPersonalAssignment(this, '` + AVAIL.techniciansArray[k]["name"] + `');">
                                         <div class="toggle-off" id="n-img"></div>
                                     </div>
                                 </div>
@@ -179,7 +176,7 @@ $(function () {
                                 <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
-                                <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this);">
+                                <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this, '&#9670;');">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
                             </div>
@@ -196,7 +193,7 @@ $(function () {
                                     <div id="toggle-gps" onClick="$AVAIL.toggleTeamMemberLocation(this);">
                                         <div class="toggle-off" id="n-img"></div>
                                     </div>
-                                    <div id="new-assignment" onClick="$AVAIL.newPersonalAssignment(this);">
+                                    <div id="new-assignment" onClick="$AVAIL.newPersonalAssignment(this, '` + AVAIL.techniciansArray[i]["name"] + `');">
                                         <div class="toggle-off" id="n-img"></div>
                                     </div>
                                 </div>
@@ -211,9 +208,7 @@ $(function () {
             html += `
                         <button id="button-teams" onclick="$AVAIL.loadRA()">PRERASPODELA</button>
                     </div>
-                    <div class="col-lg-6 col-md-6 right hidden" id="map">
-                        <iframe src="https://maps.google.com/maps?q=51.523765,-0.158612&z=15&output=embed" width="100%" height="450"></iframe>
-                    </div>
+                    <div class="col-lg-6 col-md-6 right hidden" id="map"></div>
                     <div class="hidden" id="d-back" onclick="$AVAIL.backT()"></div>
                 </div>
             `;
@@ -299,6 +294,12 @@ $(function () {
                         <div class="row" id="n">
                     `;
                     for (var i = 0; i < responseArray.length; i++) {
+                        var date = new Date(Date.parse(responseArray[i]["dueTime"]));
+                        var dueTimeString = "" + ((date.getDate() < 10) ? "0" : "") + date.getDate() + "." + ((date.getMonth() + 1 < 10) ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear() + ". " + ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+                        date = new Date(Date.parse(responseArray[i]["startTime"]));
+                        var startTimeString = "" + ((date.getDate() < 10) ? "0" : "") + date.getDate() + "." + ((date.getMonth() + 1 < 10) ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear() + ". " + ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+                        date = new Date(Date.parse(responseArray[i]["endTime"]));
+                        var endTimeString = "" + ((date.getDate() < 10) ? "0" : "") + date.getDate() + "." + ((date.getMonth() + 1 < 10) ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear() + ". " + ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
                         html += `
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="status-` + responseArray[i]["status"] + `" id="nn">
@@ -320,16 +321,17 @@ $(function () {
                                         <strong>Klijent:</strong>
                                         <br>
                                         <div class="indented">` + responseArray[i]["name"] + `<br>` + responseArray[i]["address"] + `</div>
-                                        <br><strong>Lokacija:</strong>
+                                        ` + ((responseArray[i]["description"] != null && responseArray[i]["description"] != "" && responseArray[i]["description"] != "null") ? (`
+                                        <br><strong>Napomena: </strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["description"] + `</div>
+                                        <div class="indented">` + responseArray[i]["description"] + `</div>`) : ``) + `
                                         <br><strong>Zakazano vreme:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["dueTime"] + `</div>
-                                        <br><strong>Kratak opis: </strong>
+                                        <div class="indented">` + dueTimeString + `</div>
+                                        <br><strong>Kratak opis:</strong>
                                         <br>
                                         <div class="indented">` + responseArray[i]["shortDesc"] + `</div>
-                                        <br><strong>Detaljan opis: </strong>
+                                        <br><strong>Detaljan opis:</strong>
                                         <br>
                                         <div class="indented">` + responseArray[i]["longDesc"] + `</div>
                                     </div>
@@ -340,19 +342,20 @@ $(function () {
                                         <div class="indented">` + responseArray[i]["tn"] + `</div>
                                         <br><strong>Vreme početka:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["startTime"] + `</div>
+                                        <div class="indented">` + startTimeString + `</div>
                                         <br><strong>Vreme kraja:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["endTime"] + `</div>
+                                        <div class="indented">` + endTimeString + `</div>
                                         <br><strong>Lokacija početka:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["startLat"] + ((responseArray[i]["startLat"] >= 0) ? `N&nbsp;` : `S&nbsp;`) + responseArray[i]["startLon"] + ((responseArray[i]["startLon"] >= 0) ? `E&nbsp;` : `W&nbsp;`) + `</div>
+                                        <div class="indented">` + ((responseArray[i]["startLat"]) ? responseArray[i]["startLat"].toFixed(5) : "0") + ((responseArray[i]["startLat"] >= 0) ? `N&nbsp;` : `S&nbsp;`) + ((responseArray[i]["startLon"]) ? responseArray[i]["startLon"].toFixed(5) : "0") + ((responseArray[i]["startLon"] >= 0) ? `E&nbsp;` : `W&nbsp;`) + `</div>
                                         <br><strong>Lokacija kraja:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["endLat"] + ((responseArray[i]["endLat"] >= 0) ? `N&nbsp;` : `S&nbsp;`) + responseArray[i]["endLon"] + ((responseArray[i]["endLon"] >= 0) ? `E&nbsp;` : `W&nbsp;`) + `</div>
-                                        <br><strong>Napomena: </strong>
+                                        <div class="indented">` + ((responseArray[i]["endLat"]) ? responseArray[i]["endLat"].toFixed(5) : "0") + ((responseArray[i]["endLat"] >= 0) ? `N&nbsp;` : `S&nbsp;`) + ((responseArray[i]["endLon"]) ? responseArray[i]["endLon"].toFixed(5) : "0") + ((responseArray[i]["endLon"] >= 0) ? `E&nbsp;` : `W&nbsp;`) + `</div>
+                                        ` + ((responseArray[i]["comment"] != null && responseArray[i]["comment"] != "" && responseArray[i]["comment"] != "null") ? (`
+                                        <br><strong>Napomena:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["comment"] + `</div>
+                                        <div class="indented">` + responseArray[i]["comment"] + `</div>`) : ``) + `
                                     </div>
                                 </div>
                                 <div class="row hidden" id="materials">
@@ -462,13 +465,15 @@ $(function () {
         $ajaxUtils.sendGetRequest(
             "https://avail.azurewebsites.net/api/rezultat/lokacijaServisera?id=" + $(e).parent().attr("value"),
             function (responseArray) {
-                var time = responseArray[0].timeLKL ? responseArray[0].timeLKL : "00:00:00";
+                var time = responseArray[0].timeLKL ? responseArray[0].timeLKL : "2017-01-01T00:00:00.00";
                 var lat = responseArray[0].latLKL ? responseArray[0].latLKL : 51.523765;
                 var lon = responseArray[0].lonLKL ? responseArray[0].lonLKL : -0.158612;
+                var date = new Date(Date.parse(time));
+                var timeString = "" + ((date.getDate() < 10) ? "0" : "") + date.getDate() + "." + ((date.getMonth() + 1 < 10) ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear() + ". " + ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
                 var html = `
                     <iframe src="https://maps.google.com/maps?q=` + lat + `,` + lon + `&z=15&output=embed" width="100%" height="450"></iframe>
                     <div id="map-info">
-                        <span>` + $(e).parent().text() + ((width < 992) ? `</span><br>` : `</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + Math.abs(lat) + ((lat >= 0) ? `N ` : `S `) + Math.abs(lon) + ((lon >= 0) ? `E` : `W`) + ((width < 992) ? `<br>` : `&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + time +
+                        <span>` + $(e).parent().text() + ((width < 992) ? `</span><br>` : `</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + Math.abs(lat).toFixed(5) + ((lat >= 0) ? `N ` : `S `) + Math.abs(lon).toFixed(5) + ((lon >= 0) ? `E` : `W`) + ((width < 992) ? `<br>` : `&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + timeString +
                     `</div>
                 `;
                 insertHtml("#map", html);
@@ -599,16 +604,20 @@ $(function () {
 
     AVAIL.assignedClient;
     AVAIL.assignedLocation;
+    AVAIL.taskRecipient;
+    AVAIL.isTeamTask;
 
-    AVAIL.newPersonalAssignment = function (e) {
+    AVAIL.newPersonalAssignment = function (e, name) {
         AVAIL.assignedClient = 0;
         AVAIL.assignedLocation = 0;
         AVAIL.loadNA();
         AVAIL.assignmentArray = [];
         AVAIL.assignmentArray.push($(e).parent().attr("value"));
+        AVAIL.taskRecipient = name;
+        AVAIL.isTeamTask = false;
     };
 
-    AVAIL.newTeamAssignment = function (e) {
+    AVAIL.newTeamAssignment = function (e, name) {
         AVAIL.assignedClient = 0;
         AVAIL.assignedLocation = 0;
         AVAIL.loadNA();
@@ -617,6 +626,8 @@ $(function () {
         selector.each(function () {
             AVAIL.assignmentArray.push($(this).attr("value"));
         });
+        AVAIL.taskRecipient = name;
+        AVAIL.isTeamTask = true;
     };
 
     AVAIL.clientsSearch = function (e) {
@@ -662,7 +673,7 @@ $(function () {
         } else {
             $.confirm({
                 title: "POTVRDA AKCIJE",
-                content: "Da li želite da napravite zadatak za " + ((AVAIL.assignmentArray.length > 1) ? "odabrani tim?" : "odabranog servisera?"), //TODO: append team/technician name in () or bullet
+                content: "Da li želite da napravite zadatak za " + ((AVAIL.isTeamTask) ? "odabrani tim?" : "odabranog servisera?") + "<br><br>&bull; " + AVAIL.taskRecipient,
                 buttons: {
                     cancel: {
                         text: "NE"
@@ -1011,16 +1022,12 @@ $(function () {
     AVAIL.techniciansUpdate = function (e) {
         var val = e.value;
         if (val == "") {
-            console.log(AVAIL.techniciansArray);
-            console.log(AVAIL.techniciansArrayCopy);
             var indexTech = $(e).parent().parent().find("#changes-item-name").attr("x");
             AVAIL.techniciansArray[indexTech]["idTeam"] = AVAIL.techniciansArrayCopy[indexTech]["idTeam"];
             return;
         }
         $('#team-selection option').each(function () {
             if (this.value.toUpperCase() === val.toUpperCase()) {
-                console.log(AVAIL.techniciansArray);
-                console.log(AVAIL.techniciansArrayCopy);
                 var teamID = $(this).find("#team-val").attr("value");
                 if (teamID == 0) teamID = null;
                 var indexTech = $(e).parent().parent().find("#changes-item-name").attr("x");
