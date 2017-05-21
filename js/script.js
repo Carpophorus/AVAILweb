@@ -1,6 +1,5 @@
 // TODO:
 
-// implement browser history
 // add bearer tokens for api calls
 
 
@@ -43,7 +42,52 @@ $(function () {
 
     document.addEventListener("DOMContentLoaded", function (event) {
         AVAIL.loadT();
+        if (history.state) {
+            if (history.state.state) {
+                switch (history.state.state) {
+                    case 1:
+                        AVAIL.loadT();
+                        break;
+                    case 2:
+                        AVAIL.loadS();
+                        break;
+                    case 3:
+                        AVAIL.loadN();
+                        break;
+                    case 4:
+                        AVAIL.loadP();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } else history.replaceState({
+            state: 1
+        }, null, null);
     });
+
+    window.onpopstate = function (event) {
+        if (event.state) {
+            if (event.state.state) {
+                switch (event.state.state) {
+                    case 1:
+                        AVAIL.loadT();
+                        break;
+                    case 2:
+                        AVAIL.loadS();
+                        break;
+                    case 3:
+                        AVAIL.loadN();
+                        break;
+                    case 4:
+                        AVAIL.loadP();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
 
 
 
@@ -54,6 +98,10 @@ $(function () {
     AVAIL.vehiclesArray;
 
     AVAIL.loadT = function () {
+        if (history.state)
+            if (history.state.state != 1) history.pushState({
+                state: 1
+            }, null, null);
         window.scrollTo(0, 0);
         showLoading("#main-content");
         $("#menu-item-1").addClass("tab-indicator");
@@ -214,7 +262,6 @@ $(function () {
             `;
             document.querySelector("#main-content").innerHTML = html;
         }
-        // if (history.state.state != 1) history.pushState({state: 1}, null, null);
     };
 
     AVAIL.warehousesArray;
@@ -222,6 +269,10 @@ $(function () {
     AVAIL.loadS = function () {
         window.scrollTo(0, 0);
         showLoading("#main-content");
+        if (history.state)
+            if (history.state.state != 2) history.pushState({
+                state: 2
+            }, null, null);
         $("#menu-item-1").removeClass("tab-indicator");
         $("#menu-item-2").addClass("tab-indicator");
         $("#menu-item-3").removeClass("tab-indicator");
@@ -273,6 +324,10 @@ $(function () {
     AVAIL.loadN = function () {
         window.scrollTo(0, 0);
         showLoading("#main-content");
+        if (history.state)
+            if (history.state.state != 3) history.pushState({
+                state: 3
+            }, null, null);
         $("#menu-item-1").removeClass("tab-indicator");
         $("#menu-item-2").removeClass("tab-indicator");
         $("#menu-item-3").addClass("tab-indicator");
@@ -379,6 +434,10 @@ $(function () {
     AVAIL.loadP = function () {
         window.scrollTo(0, 0);
         showLoading("#main-content");
+        if (history.state)
+            if (history.state.state != 4) history.pushState({
+                state: 4
+            }, null, null);
         $("#menu-item-1").removeClass("tab-indicator");
         $("#menu-item-2").removeClass("tab-indicator");
         $("#menu-item-3").removeClass("tab-indicator");
@@ -533,6 +592,10 @@ $(function () {
     AVAIL.loadNA = function () {
         window.scrollTo(0, 0);
         showLoading("#main-content");
+        if (history.state)
+            if (history.state.state != 1) history.pushState({
+                state: 1
+            }, null, null);
         if (AVAIL.clientsArray.length == 0) {
             $ajaxUtils.sendGetRequest(
                 "https://avail.azurewebsites.net/api/rezultat/klijenti",
@@ -696,7 +759,25 @@ $(function () {
                                 },
                                 true /*, AVAIL.bearer*/
                             );
-                            AVAIL.loadT();
+                            $.confirm({
+                                title: "POTVRDA AKCIJE",
+                                content: "Da li želite da napravite JOŠ JEDAN zadatak za " + ((AVAIL.isTeamTask) ? "odabrani tim?" : "odabranog servisera?") + "<br><br>&bull; " + AVAIL.taskRecipient,
+                                buttons: {
+                                    cancel: {
+                                        text: "NE",
+                                        action: function () {
+                                            AVAIL.loadT();
+                                        }
+                                    },
+                                    confirm: {
+                                        text: "DA",
+                                        btnClass: "btn-red",
+                                        action: function () {
+                                            AVAIL.loadNA();
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 }
@@ -731,6 +812,10 @@ $(function () {
     AVAIL.loadRA = function () {
         window.scrollTo(0, 0);
         showLoading("#main-content");
+        if (history.state)
+            if (history.state.state != 1) history.pushState({
+                state: 1
+            }, null, null);
         if (AVAIL.techniciansArray == null || AVAIL.techniciansDirty) {
             $ajaxUtils.sendGetRequest(
                 "https://avail.azurewebsites.net/api/rezultat/serviseri",
