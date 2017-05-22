@@ -377,7 +377,7 @@ $(function () {
                                         <br>
                                         <div class="indented">` + responseArray[i]["name"] + `<br>` + responseArray[i]["address"] + `</div>
                                         ` + ((responseArray[i]["description"] != null && responseArray[i]["description"] != "" && responseArray[i]["description"] != "null") ? (`
-                                        <br><strong>Napomena: </strong>
+                                        <br><strong>Lokacija:</strong>
                                         <br>
                                         <div class="indented">` + responseArray[i]["description"] + `</div>`) : ``) + `
                                         <br><strong>Zakazano vreme:</strong>
@@ -386,9 +386,10 @@ $(function () {
                                         <br><strong>Kratak opis:</strong>
                                         <br>
                                         <div class="indented">` + responseArray[i]["shortDesc"] + `</div>
+                                        ` + ((responseArray[i]["longDesc"] != null && responseArray[i]["longDesc"] != "" && responseArray[i]["longDesc"] != "null") ? (`
                                         <br><strong>Detaljan opis:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["longDesc"] + `</div>
+                                        <div class="indented">` + responseArray[i]["longDesc"] + `</div>`) : ``) + `
                                     </div>
                                     <div class="hidden-lg hidden-md col-sm-12 col-xs-12">&nbsp;</div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
