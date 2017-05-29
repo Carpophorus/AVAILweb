@@ -1,5 +1,6 @@
 // TODO:
 
+// only one vehicle by team
 // add bearer tokens for api calls
 
 
@@ -375,7 +376,9 @@ $(function () {
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                         <strong>Klijent:</strong>
                                         <br>
-                                        <div class="indented">` + responseArray[i]["name"] + `<br>` + responseArray[i]["address"] + `</div>
+                                        <div class="indented">` + responseArray[i]["name"] + `<br>
+                                        ` + ((responseArray[i]["address"] != null && responseArray[i]["address"] != "" && responseArray[i]["address"] != "null") ? (responseArray[i]["address"]) : ``) + `
+                                        </div>
                                         ` + ((responseArray[i]["description"] != null && responseArray[i]["description"] != "" && responseArray[i]["description"] != "null") ? (`
                                         <br><strong>Lokacija:</strong>
                                         <br>
