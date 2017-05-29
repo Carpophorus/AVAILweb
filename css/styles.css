@@ -937,7 +937,7 @@ h2 {
     }
     body {
         padding-top: 52px;
-        font-size: 3vh;
+        /*font-size: 3vh;*/
     }
     #main-content {
         padding-top: 15px;
@@ -947,7 +947,7 @@ h2 {
         padding-right: 20px;
     }
     .s-item {
-        line-height: 7vh;
+        /*line-height: 7vh;*/
     }
     #material-name {
         text-align: left;
@@ -966,15 +966,15 @@ h2 {
         top: 60px;
     }
     #search-icon {
-        width: 3.66vh;
-        height: 3.66vh;
+        /*width: 3.66vh;
+        height: 3.66vh;*/
     }
     #r1stats div {
-        height: 10vh;
-        line-height: 10vh;
+        /*height: 10vh;
+        line-height: 10vh;*/
     }
     .form-control {
-        font-size: 3vh;
+        /*font-size: 3vh;*/
     }
     .small-left {
         padding-right: 0;
