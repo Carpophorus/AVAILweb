@@ -835,7 +835,7 @@ h2 {
     padding: 0;
 }
 
-#changes-title {
+.changes-title {
     background-color: rgba(255, 255, 255, 0.07);
     text-align: center;
     padding: 10px;

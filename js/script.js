@@ -1,6 +1,5 @@
 // TODO:
 
-// only one vehicle by team
 // add bearer tokens for api calls
 
 
@@ -880,9 +879,9 @@ $(function () {
                     <datalist id="team-selection">
                         ` + optionsWithUnassigned + `
                     </datalist>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="ra-tech">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="changes-container">
-                            <div id="changes-title">
+                            <div class="changes-title">
                                 ZAPOSLENI
                                 <div id="toggle-reset" onClick="$AVAIL.resetTechnicians();">
                                     <div class="toggle-off" id="n-img"></div>
@@ -915,9 +914,9 @@ $(function () {
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" id="ra-veh">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="changes-container">
-                            <div id="changes-title">
+                            <div class="changes-title">
                                 VOZILA
                                 <div id="toggle-reset" onClick="$AVAIL.resetVehicles();">
                                     <div class="toggle-off" id="n-img"></div>
@@ -1140,6 +1139,13 @@ $(function () {
                 if (teamID == 0) teamID = null;
                 var indexVeh = $(e).parent().parent().find("#changes-item-name").attr("x");
                 AVAIL.vehiclesArray[indexVeh]["idTeam"] = teamID;
+                $('#ra-veh #changes-container #changes-items #changes-item').each(function () {
+                    var x = $(this).find('#changes-item-name').attr("x");
+                    if (AVAIL.vehiclesArray[x]["idTeam"] == teamID && x != indexVeh) {
+                        $(this).find('#changes-item-dropdown #team-select').val(String.fromCharCode(9670));
+                        AVAIL.vehiclesArray[x]["idTeam"] = null;
+                    }
+                });
                 AVAIL.vehiclesDirty = true;
                 return;
             }
