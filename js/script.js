@@ -1139,13 +1139,15 @@ $(function () {
                 if (teamID == 0) teamID = null;
                 var indexVeh = $(e).parent().parent().find("#changes-item-name").attr("x");
                 AVAIL.vehiclesArray[indexVeh]["idTeam"] = teamID;
-                $('#ra-veh #changes-container #changes-items #changes-item').each(function () {
-                    var x = $(this).find('#changes-item-name').attr("x");
-                    if (AVAIL.vehiclesArray[x]["idTeam"] == teamID && x != indexVeh) {
-                        $(this).find('#changes-item-dropdown #team-select').val(String.fromCharCode(9670));
-                        AVAIL.vehiclesArray[x]["idTeam"] = null;
-                    }
-                });
+                if (teamID != null) {
+                    $('#ra-veh #changes-container #changes-items #changes-item').each(function () {
+                        var x = $(this).find('#changes-item-name').attr("x");
+                        if (AVAIL.vehiclesArray[x]["idTeam"] == teamID && x != indexVeh) {
+                            $(this).find('#changes-item-dropdown #team-select').val(String.fromCharCode(9670));
+                            AVAIL.vehiclesArray[x]["idTeam"] = null;
+                        }
+                    });
+                }
                 AVAIL.vehiclesDirty = true;
                 return;
             }
