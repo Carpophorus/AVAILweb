@@ -769,20 +769,36 @@ h2 {
     box-shadow: none;
 }
 
+::-webkit-input-placeholder {
+    color: #A0A0A0;
+}
+
+:-ms-input-placeholder {
+    color: #A0A0A0;
+}
+
+::-moz-placeholder {
+    color: #A0A0A0;
+}
+
+:-moz-placeholder {
+    color: #A0A0A0;
+}
+
 .form-control::-webkit-input-placeholder {
-    color: #747474;
-}
-
-.form-control:-moz-placeholder {
-    color: #747474;
-}
-
-.form-control::-moz-placeholder {
-    color: #747474;
+    color: #A0A0A0;
 }
 
 .form-control:-ms-input-placeholder {
-    color: #747474;
+    color: #A0A0A0;
+}
+
+.form-control::-moz-placeholder {
+    color: #A0A0A0;
+}
+
+.form-control:-moz-placeholder {
+    color: #A0A0A0;
 }
 
 #ra {
