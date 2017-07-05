@@ -156,10 +156,12 @@ $(function () {
                 if (teamExists) {
                     var registration = "";
                     var model = "";
+                    var idV = 0;
                     for (var k = 0; k < AVAIL.vehiclesArray.length; k++) {
                         if (AVAIL.vehiclesArray[k]["idTeam"] == teamID) {
                             registration = AVAIL.vehiclesArray[k]["registration"];
                             model = AVAIL.vehiclesArray[k]["model"];
+                            idV = AVAIL.vehiclesArray[k]["idVehicle"];
                             break;
                         }
                     }
@@ -167,13 +169,13 @@ $(function () {
                         <div id="team-container-outer">
                             <div id="team-container">
                                 <div id="team-name" value="` + teamID + `"><span>` + teamName + `</span></div>
-                                <div id="team-vehicle">
+                                <div id="team-vehicle" value="` + ((registration != "" || model != "") ? idV : 0) + `">
                                     <span>` + registration + `<br><span class="hidden-sm hidden-xs">` + model + `</span></span>
                                 </div>
                                 <div id="toggle-details-team" onClick="$AVAIL.toggleTeamDetails(this);">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
-                                <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);">
+                                <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);" class="` + ((registration != "" || model != "") ? `vehicle-present` : ``) + `">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
                                 <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this, '` + teamName + `');">
@@ -545,6 +547,14 @@ $(function () {
         window.scrollTo(0, 0);
     };
 
+    AVAIL.toggleTeamVehicleLocation = function (e) {
+        if ($(e).hasClass("vehicle-present")) {
+            console.log($(e).parent().find("#team-vehicle").attr("value"));
+        } else {
+            console.log("no api call");
+        }
+    };
+
     AVAIL.backT = function () {
         $(document).find("#map").addClass("hidden");
         $(document).find("#d-back").addClass("hidden");
@@ -648,6 +658,8 @@ $(function () {
                     <div id="picker-container">
                         <input id="due-time" class="form-control" placeholder="Zakazano vreme" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Zakazano vreme'" onkeydown="return false">
                     </div>
+                    <input id="boss-phone" type="text" placeholder="Telefon šefa" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Telefon šefa'">
+                    <input id="client-phone" type="text" placeholder="Telefon klijenta" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Telefon klijenta'">
                     <input id="short-desc" type="text" placeholder="Kratak opis" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Kratak opis'">
                     <textarea id="long-desc" placeholder="Detaljan opis" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Detaljan opis'"></textarea>
                     <div class="row">
