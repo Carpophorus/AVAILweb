@@ -156,12 +156,12 @@ $(function () {
                 if (teamExists) {
                     var registration = "";
                     var model = "";
-                    var idV = 0;
+                    var idW = 0;
                     for (var k = 0; k < AVAIL.vehiclesArray.length; k++) {
                         if (AVAIL.vehiclesArray[k]["idTeam"] == teamID) {
                             registration = AVAIL.vehiclesArray[k]["registration"];
                             model = AVAIL.vehiclesArray[k]["model"];
-                            idV = AVAIL.vehiclesArray[k]["idVehicle"];
+                            idW = AVAIL.vehiclesArray[k]["idWialon"];
                             break;
                         }
                     }
@@ -169,13 +169,13 @@ $(function () {
                         <div id="team-container-outer">
                             <div id="team-container">
                                 <div id="team-name" value="` + teamID + `"><span>` + teamName + `</span></div>
-                                <div id="team-vehicle" value="` + ((registration != "" || model != "") ? idV : 0) + `">
+                                <div id="team-vehicle" value="` + (((registration != "" || model != "") && idW != null) ? idW : 0) + `" reg="` + registration + `">
                                     <span>` + registration + `<br><span class="hidden-sm hidden-xs">` + model + `</span></span>
                                 </div>
                                 <div id="toggle-details-team" onClick="$AVAIL.toggleTeamDetails(this);">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
-                                <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);" class="` + ((registration != "" || model != "") ? `vehicle-present` : ``) + `">
+                                <div id="toggle-gps" onClick="$AVAIL.toggleTeamVehicleLocation(this);" class="` + (((registration != "" || model != "") && idW != null) ? `vehicle-present` : ``) + `">
                                     <div class="toggle-off" id="n-img"></div>
                                 </div>
                                 <div id="new-assignment" onClick="$AVAIL.newTeamAssignment(this, '` + teamName + `');">
@@ -549,9 +549,32 @@ $(function () {
 
     AVAIL.toggleTeamVehicleLocation = function (e) {
         if ($(e).hasClass("vehicle-present")) {
-            console.log($(e).parent().find("#team-vehicle").attr("value"));
-        } else {
-            console.log("no api call");
+            $(document).find("#map").removeClass("hidden");
+            var width = window.innerWidth;
+            if (width < 992) {
+                $(document).find("#d-back").removeClass("hidden");
+                $(document).find("#teams").addClass("hidden");
+            }
+            showSmallLoading("#map");
+            $ajaxUtils.sendGetRequest(
+                "https://notifikacije.azurewebsites.net/api/avail/pozicija_vozila?id=" + $(e).parent().find("#team-vehicle").attr("value"),
+                function (responseArray) {
+                    var time = responseArray.t ? responseArray.t : 1483225200;
+                    var lat = responseArray.y ? responseArray.y : 51.523765;
+                    var lon = responseArray.x ? responseArray.x : -0.158612;
+                    var date = new Date(time * 1000);
+                    var timeString = "" + ((date.getDate() < 10) ? "0" : "") + date.getDate() + "." + ((date.getMonth() + 1 < 10) ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear() + ". " + ((date.getHours() < 10) ? "0" : "") + date.getHours() + ":" + ((date.getMinutes() < 10) ? "0" : "") + date.getMinutes();
+                    var html = `
+                        <iframe src="https://maps.google.com/maps?q=` + lat + `,` + lon + `&z=15&output=embed" width="100%" height="450"></iframe>
+                        <div id="map-info">
+                            <span>` + $(e).parent().find("#team-vehicle").attr("reg") + ((width < 992) ? `</span><br>` : `</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + Math.abs(lat).toFixed(5) + ((lat >= 0) ? `N ` : `S `) + Math.abs(lon).toFixed(5) + ((lon >= 0) ? `E` : `W`) + ((width < 992) ? `<br>` : `&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;`) + timeString +
+                        `</div>
+                    `;
+                    insertHtml("#map", html);
+                },
+                true /*, AVAIL.bearer ?*/
+            );
+            window.scrollTo(0, 0);
         }
     };
 
@@ -748,6 +771,17 @@ $(function () {
                     }
                 }
             });
+        } else if (!(/^$|^[+]?[\d- ]{9,20}$/.test(document.getElementById("boss-phone").value.replace(/[ ]+/, " ")) && /^$|^[+]?[\d- ]{9,20}$/.test(document.getElementById("client-phone").value.replace(/[ ]+/, " ")))) {
+            $.confirm({
+                title: "GREŠKA",
+                content: "Proverite format unetih telefonskih brojeva.",
+                buttons: {
+                    confirm: {
+                        text: "OK",
+                        btnClass: "btn-red"
+                    }
+                }
+            });
         } else {
             $.confirm({
                 title: "POTVRDA AKCIJE",
@@ -761,7 +795,7 @@ $(function () {
                         btnClass: "btn-red",
                         action: function () {
                             $ajaxUtils.sendPostRequest(
-                                "https://avail.azurewebsites.net/api/rezultat/noviZadatak?id=" + AVAIL.assignedClient + "&timestring=" + encodeURIComponent(AVAIL.datetimeString) + "&shortDescString=" + encodeURIComponent(document.getElementById("short-desc").value) + ((document.getElementById("long-desc").value == "") ? "" : ("&longDescString=" + encodeURIComponent(document.getElementById("long-desc").value))) + ((AVAIL.assignedLocation == 0) ? "" : ("&id1=" + AVAIL.assignedLocation)),
+                                "https://avail.azurewebsites.net/api/rezultat/noviZadatak?id=" + AVAIL.assignedClient + "&timestring=" + encodeURIComponent(AVAIL.datetimeString) + "&shortDescString=" + encodeURIComponent(document.getElementById("short-desc").value) + ((document.getElementById("long-desc").value == "") ? "" : ("&longDescString=" + encodeURIComponent(document.getElementById("long-desc").value))) + ((AVAIL.assignedLocation == 0) ? "" : ("&id1=" + AVAIL.assignedLocation)) + ((document.getElementById("boss-phone").value == "") ? "" : ("&bp=" + encodeURIComponent(document.getElementById("boss-phone").value.replace(/[ ]+/, " ")))) + ((document.getElementById("client-phone").value == "") ? "" : ("&cp=" + encodeURIComponent(document.getElementById("client-phone").value.replace(/[ ]+/, " ")))),
                                 function (responseArray) {
                                     var newTaskID = responseArray[0]["new_i"];
                                     for (var i = 0; i < AVAIL.assignmentArray.length; i++) {
