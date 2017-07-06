@@ -797,36 +797,43 @@ $(function () {
                             $ajaxUtils.sendPostRequest(
                                 "https://avail.azurewebsites.net/api/rezultat/noviZadatak?id=" + AVAIL.assignedClient + "&timestring=" + encodeURIComponent(AVAIL.datetimeString) + "&shortDescString=" + encodeURIComponent(document.getElementById("short-desc").value) + ((document.getElementById("long-desc").value == "") ? "" : ("&longDescString=" + encodeURIComponent(document.getElementById("long-desc").value))) + ((AVAIL.assignedLocation == 0) ? "" : ("&id1=" + AVAIL.assignedLocation)) + ((document.getElementById("boss-phone").value == "") ? "" : ("&bp=" + encodeURIComponent(document.getElementById("boss-phone").value.replace(/[ ]+/, " ")))) + ((document.getElementById("client-phone").value == "") ? "" : ("&cp=" + encodeURIComponent(document.getElementById("client-phone").value.replace(/[ ]+/, " ")))),
                                 function (responseArray) {
+                                    showLoading("#main-content");
+                                    scrollTo(0,0);
                                     var newTaskID = responseArray[0]["new_i"];
+                                    var aaCount = 0;
                                     for (var i = 0; i < AVAIL.assignmentArray.length; i++) {
                                         $ajaxUtils.sendPostRequest(
                                             "https://avail.azurewebsites.net/api/rezultat/serviseriZadaci?id=" + newTaskID + "&id1=" + AVAIL.assignmentArray[i],
-                                            function (responseArray) {},
+                                            function (responseArray) {
+                                                aaCount++;
+                                                if (aaCount == AVAIL.assignmentArray.length) {
+                                                    $.confirm({
+                                                        title: "DISTRIBUCIJA ZAVRŠENA",
+                                                        content: "Da li želite da napravite JOŠ JEDAN zadatak za " + ((AVAIL.isTeamTask) ? "odabrani tim?" : "odabranog servisera?") + "<br><br>&bull; " + AVAIL.taskRecipient,
+                                                        buttons: {
+                                                            cancel: {
+                                                                text: "NE",
+                                                                action: function () {
+                                                                    AVAIL.loadT();
+                                                                }
+                                                            },
+                                                            confirm: {
+                                                                text: "DA",
+                                                                btnClass: "btn-red",
+                                                                action: function () {
+                                                                    AVAIL.loadNA();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            },
                                             true /*, AVAIL.bearer*/
                                         );
                                     }
                                 },
                                 true /*, AVAIL.bearer*/
                             );
-                            $.confirm({
-                                title: "POTVRDA AKCIJE",
-                                content: "Da li želite da napravite JOŠ JEDAN zadatak za " + ((AVAIL.isTeamTask) ? "odabrani tim?" : "odabranog servisera?") + "<br><br>&bull; " + AVAIL.taskRecipient,
-                                buttons: {
-                                    cancel: {
-                                        text: "NE",
-                                        action: function () {
-                                            AVAIL.loadT();
-                                        }
-                                    },
-                                    confirm: {
-                                        text: "DA",
-                                        btnClass: "btn-red",
-                                        action: function () {
-                                            AVAIL.loadNA();
-                                        }
-                                    }
-                                }
-                            });
                         }
                     }
                 }
